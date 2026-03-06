@@ -1,0 +1,159 @@
+---
+# Standalone base setup playbook
+# Usage: ansible-playbook playbooks/base.yml
+- name: Base system configuration
+  hosts: portfolio
+  become: true
+
+  vars:
+    ssh_port: 2222
+    packages:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+      - software-properties-common
+      - ufw
+      - fail2ban
+      - unzip
+      - htop
+      - git
+      - python3-pip
+      - certbot
+      - python3-certbot-nginx
+      - nginx
+
+  tasks:
+    - name: Update and upgrade apt packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+        cache_valid_time: 3600
+
+    - name: Install required packages
+      apt:
+        name: "{{ packages }}"
+        state: present
+
+    # --- SSH Hardening ---
+    - name: Set SSH port
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?Port '
+        line: "Port {{ ssh_port }}"
+      notify: restart sshd
+
+    - name: Disable password authentication
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication '
+        line: "PasswordAuthentication no"
+      notify: restart sshd
+
+    - name: Disable root login
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PermitRootLogin '
+        line: "PermitRootLogin no"
+      notify: restart sshd
+
+    # --- Firewall (UFW) ---
+    - name: Set UFW default deny incoming
+      ufw:
+        direction: incoming
+        policy: deny
+
+    - name: Set UFW default allow outgoing
+      ufw:
+        direction: outgoing
+        policy: allow
+
+    - name: Allow SSH on custom port
+      ufw:
+        rule: allow
+        port: "{{ ssh_port }}"
+        proto: tcp
+
+    - name: Allow HTTP
+      ufw:
+        rule: allow
+        port: "80"
+        proto: tcp
+
+    - name: Allow HTTPS
+      ufw:
+        rule: allow
+        port: "443"
+        proto: tcp
+
+    - name: Enable UFW
+      ufw:
+        state: enabled
+
+    # --- fail2ban ---
+    - name: Configure fail2ban for SSH
+      copy:
+        content: |
+          [sshd]
+          enabled = true
+          port = {{ ssh_port }}
+          filter = sshd
+          logpath = /var/log/auth.log
+          maxretry = 3
+          bantime = 3600
+          findtime = 600
+
+          [nginx-http-auth]
+          enabled = true
+          port = http,https
+          filter = nginx-http-auth
+          logpath = /var/log/nginx/error.log
+          maxretry = 5
+          bantime = 3600
+        dest: /etc/fail2ban/jail.local
+      notify: restart fail2ban
+
+    # --- Docker ---
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository (ARM64)
+      apt_repository:
+        repo: "deb [arch=arm64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Install Docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: present
+        update_cache: yes
+
+    - name: Add ubuntu user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: restart sshd
+      systemd:
+        name: ssh
+        state: restarted
+
+    - name: restart fail2ban
+      systemd:
+        name: fail2ban
+        state: restarted

@@ -1,0 +1,39 @@
+# SERP demo deployment - adapted for portfolio
+# Uses mock backend (no PostgreSQL needed)
+# Runs on ports 3001 (frontend) and 5001 (backend)
+
+services:
+  backend:
+    build:
+      context: /opt/serp/backend
+      dockerfile: Dockerfile
+    container_name: serp-backend
+    restart: unless-stopped
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5001"]
+    ports:
+      - "127.0.0.1:5001:5001"
+    environment:
+      - DEBUG=0
+    networks:
+      - serp-net
+
+  frontend:
+    build:
+      context: /opt/serp/frontend
+      dockerfile: Dockerfile
+    container_name: serp-frontend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3001:3000"
+    environment:
+      - REACT_APP_API_URL=/demo/serp/api
+      - PUBLIC_URL=/demo/serp
+      - WDS_SOCKET_PATH=/demo/serp/ws
+    depends_on:
+      - backend
+    networks:
+      - serp-net
+
+networks:
+  serp-net:
+    driver: bridge

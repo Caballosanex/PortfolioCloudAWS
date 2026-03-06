@@ -1,0 +1,110 @@
+personal:
+  name: "Alex Sanchez Blabia"
+  title: "Junior Systems & Network Administrator"
+  email: "alexsanchezblabia@gmail.com"
+  phone: "+34 608 840 086"
+  location: "Barcelona, Spain"
+  linkedin: "linkedin.com/in/alex-sanchez-blabia"
+  github: "github.com/Caballosanex"
+  website: "asanchezbl.dev"
+
+summary: >
+  Junior Systems and Network Administrator with 2+ years of hands-on experience in IT
+  support, systems maintenance, and network administration. Skilled in Linux, cloud
+  infrastructure (AWS), Docker, and cybersecurity. Active open-source contributor with
+  experience in hackathon-level full-stack development. Currently completing ASIX at
+  iTIC Barcelona.
+
+experience:
+  - title: "Network Infrastructure Consultant"
+    company: "Ismael Prego (Tech Content Creator)"
+    date: "2025"
+    location: "Remote"
+    tasks:
+      - "Designed a complete 10GbE network and NAS infrastructure for a professional video production studio handling 3-4 TB/month of 4K footage"
+      - "Evaluated and compared rack-mounted NAS solutions (Synology RS422+ vs RS2423RP+) and network switching equipment (Ubiquiti UniFi)"
+      - "Performed bandwidth analysis demonstrating Ethernet 10GbE sufficiency over fiber optic, saving the client significant cost"
+      - "Delivered comprehensive proposal including RAID6 configuration, UPS protection, static IP planning, and budget (4,700 - 7,300 EUR)"
+
+  - title: "Help Desk Technician N1"
+    company: "Fractalia Systems"
+    date: "Nov 2022 - Aug 2024"
+    location: "L'Hospitalet de Llobregat"
+    tasks:
+      - "Managed call center with 10 phone lines, handling ~200 weekly calls from Telefonica and CaixaBank suppliers"
+      - "Resolved system incidents and mobile network issues as N1 technician"
+      - "Authored over 50% of service reports for the department"
+
+  - title: "IT Intern"
+    company: "Red Computer Barcelona"
+    date: "Mar 2022 - Jun 2022"
+    location: "Barcelona"
+    tasks:
+      - "Systems maintenance for SMEs with budgets between 2,000 - 4,000 EUR"
+      - "User and shared resource administration for individuals and SMEs"
+      - "Help desk support (local and remote), assembling ~5 computers per day"
+
+education:
+  - degree: "Higher Certificate in Systems and Network Administration (ASIX)"
+    institution: "Institut TIC de Barcelona"
+    date: "Sep 2024 - Present"
+    location: "Barcelona"
+
+  - degree: "Software Development Program"
+    institution: "42 Barcelona"
+    date: "Jun 2022 - Aug 2024"
+    location: "Barcelona"
+    details: "Advanced C/C++ programming, system programming, network services, database management"
+
+  - degree: "VET in Microcomputer Systems and Networks (SMX)"
+    institution: "Institut Mare de Deu de la Merce"
+    date: "Aug 2020 - Jun 2022"
+    location: "Barcelona"
+    details: "Final project: Centralized virtualization service using IsardVDI"
+
+skills:
+  systems: "Linux (Ubuntu, Debian), Windows Server, Proxmox, VMware"
+  networking: "TCP/IP, DNS, DHCP, VPN, VLAN, Cisco IOS, 10GbE, LAN/WAN"
+  cloud: "AWS (EC2, VPC, S3, Route53, IAM), Terraform, Ansible"
+  containers: "Docker, Docker Compose"
+  security: "fail2ban, UFW/iptables, Certbot/SSL, Penetration Testing"
+  development: "Python, C, C++, Bash, FastAPI, React, Flutter, Git"
+  monitoring: "Prometheus, Grafana, Node Exporter"
+  other: "Nginx, PostgreSQL, SQLite, Office 365, Self-hosting"
+
+certifications:
+  - name: "CCNA: Introduction to Networks"
+    issuer: "Cisco"
+    date: "Feb 2025"
+
+  - name: "Networking Basics"
+    issuer: "Cisco"
+    date: "Oct 2023"
+
+  - name: "Introduction to Cybersecurity"
+    issuer: "Cisco"
+    date: "Aug 2023"
+
+  - name: "Cybersecurity Bootcamp"
+    issuer: "42 Barcelona / Fundacion Telefonica"
+    date: "May 2023"
+
+  - name: "B2 First (FCE)"
+    issuer: "University of Cambridge"
+    date: "Jul 2020"
+
+languages:
+  - lang: "Catalan"
+    level: "Native"
+  - lang: "Spanish"
+    level: "Native"
+  - lang: "English"
+    level: "Professional (B2 Cambridge)"
+  - lang: "French"
+    level: "Basic"
+
+achievements:
+  - "AWS GameDay 2025 - National runner-up (Team AMEP, iTIC Barcelona)"
+  - "Talent Arena Hackathon 2025 - Built SERP emergency management system"
+  - "Talent Arena Hackathon 2026 - Built CatLink EV charger AI agent"
+  - "Active open-source contributor: WeatherMaster (Flutter), mfkey/Flipper Zero (70x performance optimization in C)"

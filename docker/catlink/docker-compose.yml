@@ -1,0 +1,44 @@
+# CatLink demo deployment - adapted for portfolio
+# Runs on ports 3002 (frontend) and 8002 (backend)
+# Nokia APIs mocked via NOKIA_MOCK_MODE=true
+# Gemini AI mocked via mock agent patch
+
+services:
+  backend:
+    build:
+      context: /opt/catlink/backend
+      dockerfile: Dockerfile
+    container_name: catlink-backend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8002:8000"
+    environment:
+      - NOKIA_MOCK_MODE=true
+      - BACKEND_HOST=0.0.0.0
+      - BACKEND_PORT=8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - catlink-net
+
+  frontend:
+    build:
+      context: /opt/catlink/frontend
+      dockerfile: Dockerfile
+    container_name: catlink-frontend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3002:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - catlink-net
+
+networks:
+  catlink-net:
+    driver: bridge
