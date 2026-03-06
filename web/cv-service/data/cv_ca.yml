@@ -1,0 +1,114 @@
+personal:
+  name: "Alex Sanchez Blabia"
+  title: "Administrador Junior de Sistemes i Xarxes"
+  email: "alexsanchezblabia@gmail.com"
+  phone: "+34 608 840 086"
+  location: "Barcelona, Espanya"
+  linkedin: "linkedin.com/in/alex-sanchez-blabia"
+  github: "github.com/Caballosanex"
+  website: "asanchezbl.dev"
+
+summary: >
+  Administrador Junior de Sistemes i Xarxes amb mes de 2 anys d'experiencia practica en
+  suport IT, manteniment de sistemes i administracio de xarxes. Competent en Linux,
+  infraestructura cloud (AWS), Docker i ciberseguretat. Contribuidor actiu de projectes
+  open source amb experiencia en desenvolupament full-stack a nivell de hackathon.
+  Actualment cursant el CFGS ASIX a iTIC Barcelona.
+
+experience:
+  - title: "Consultor d'Infraestructura de Xarxa"
+    company: "Ismael Prego (Creador de contingut tech)"
+    date: "2025"
+    location: "Remot"
+    tasks:
+      - "Disseny complet de xarxa 10GbE i infraestructura NAS per a un estudi de produccio de video professional amb 3-4 TB/mes de material 4K"
+      - "Avaluacio i comparativa de solucions NAS en rack (Synology RS422+ vs RS2423RP+) i equipament de xarxa (Ubiquiti UniFi)"
+      - "Analisi d'amplada de banda demostrant la suficiencia d'Ethernet 10GbE davant fibra optica, estalviant costos significatius al client"
+      - "Entrega de proposta integral incloent configuracio RAID6, proteccio UPS, planificacio IP estatica i pressupost (4.700 - 7.300 EUR)"
+
+  - title: "Tecnic Help Desk N1"
+    company: "Fractalia Systems"
+    date: "Nov 2022 - Ago 2024"
+    location: "L'Hospitalet de Llobregat"
+    tasks:
+      - "Gestio de centraleta telefonica amb 10 linies, atenent ~200 trucades setmanals de proveidors de Telefonica i empleats de CaixaBank"
+      - "Resolucio d'incidencies de sistemes i xarxes mobils com a tecnic N1"
+      - "Creacio de mes del 50% dels informes de servei del departament"
+
+  - title: "Practiques IT"
+    company: "Red Computer Barcelona"
+    date: "Mar 2022 - Jun 2022"
+    location: "Barcelona"
+    tasks:
+      - "Manteniment de sistemes per a PIMES amb pressupostos entre 2.000 - 4.000 EUR"
+      - "Administracio d'usuaris i recursos compartits per a particulars i PIMES"
+      - "Suport help desk local i remot, muntatge de ~5 equips diaris"
+
+education:
+  - degree: "CFGS en Administracio de Sistemes Informatics en Xarxa (ASIX)"
+    institution: "Institut TIC de Barcelona"
+    date: "Set 2024 - Present"
+    location: "Barcelona"
+
+  - degree: "Programa de Desenvolupament de Software"
+    institution: "42 Barcelona"
+    date: "Jun 2022 - Ago 2024"
+    location: "Barcelona"
+    details: "Programacio avancada en C/C++, programacio de sistemes, serveis de xarxa, gestio de bases de dades"
+
+  - degree: "CFGM en Sistemes Microinformatics i Xarxes (SMX)"
+    institution: "Institut Mare de Deu de la Merce"
+    date: "Ago 2020 - Jun 2022"
+    location: "Barcelona"
+    details: "Projecte final: Servei de virtualitzacio centralitzat amb IsardVDI"
+
+skills:
+  systems: "Linux (Ubuntu, Debian), Windows Server, Proxmox, VMware"
+  networking: "TCP/IP, DNS, DHCP, VPN, VLAN, Cisco IOS, 10GbE, LAN/WAN"
+  cloud: "AWS (EC2, VPC, S3, Route53, IAM), Terraform, Ansible"
+  containers: "Docker, Docker Compose"
+  security: "fail2ban, UFW/iptables, Certbot/SSL, Proves de Penetracio"
+  development: "Python, C, C++, Bash, FastAPI, React, Flutter, Git"
+  monitoring: "Prometheus, Grafana, Node Exporter"
+  other: "Nginx, PostgreSQL, SQLite, Office 365, Self-hosting"
+
+certifications:
+  - name: "CCNA: Introduction to Networks"
+    issuer: "Cisco"
+    date: "Feb 2025"
+
+  - name: "Networking Basics"
+    issuer: "Cisco"
+    date: "Oct 2023"
+
+  - name: "Introduction to Cybersecurity"
+    issuer: "Cisco"
+    date: "Ago 2023"
+
+  - name: "Bootcamp de Ciberseguretat"
+    issuer: "42 Barcelona / Fundacio Telefonica"
+    date: "Mai 2023"
+
+  - name: "B2 First (FCE)"
+    issuer: "University of Cambridge"
+    date: "Jul 2020"
+
+  - name: "Suficiencia de Catala (C1)"
+    issuer: "Generalitat de Catalunya"
+    date: "Feb 2025"
+
+languages:
+  - lang: "Catala"
+    level: "Natiu"
+  - lang: "Castella"
+    level: "Natiu"
+  - lang: "Angles"
+    level: "Professional (B2 Cambridge)"
+  - lang: "Frances"
+    level: "Basic"
+
+achievements:
+  - "AWS GameDay 2025 - Subcampio nacional (Equip AMEP, iTIC Barcelona)"
+  - "Talent Arena Hackathon 2025 - Desenvolupament del sistema d'emergencies SERP"
+  - "Talent Arena Hackathon 2026 - Desenvolupament de CatLink, agent IA per a carregadors de VE"
+  - "Contribuidor open source actiu: WeatherMaster (Flutter), mfkey/Flipper Zero (optimitzacio de rendiment 70x en C)"

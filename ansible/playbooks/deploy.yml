@@ -1,0 +1,259 @@
+---
+# Deploy all web content and services
+# Usage: ansible-playbook playbooks/deploy.yml
+- name: Deploy web content and services
+  hosts: portfolio
+  become: true
+
+  vars:
+    base_dir: /opt/portfolio
+    web_dir: /var/www
+    domain: asanchezbl.dev
+
+  tasks:
+    # --- Create directories ---
+    - name: Create web directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+      loop:
+        - "{{ web_dir }}/landing"
+        - "{{ web_dir }}/portfolio"
+        - "{{ web_dir }}/assets"
+        - "{{ base_dir }}"
+        - "{{ base_dir }}/cv-service"
+        - "{{ base_dir }}/scripts"
+        - /opt/serp
+        - /opt/catlink
+
+    # --- Deploy landing page ---
+    - name: Copy landing page
+      copy:
+        src: ../../web/landing/
+        dest: "{{ web_dir }}/landing/"
+        owner: www-data
+        group: www-data
+
+    # --- Deploy portfolio ---
+    - name: Copy portfolio
+      copy:
+        src: ../../web/portfolio/
+        dest: "{{ web_dir }}/portfolio/"
+        owner: www-data
+        group: www-data
+
+    # --- Deploy assets ---
+    - name: Copy assets
+      copy:
+        src: ../../assets/
+        dest: "{{ web_dir }}/assets/"
+        owner: www-data
+        group: www-data
+
+    # --- Deploy CV service ---
+    - name: Copy CV service
+      copy:
+        src: ../../web/cv-service/
+        dest: "{{ base_dir }}/cv-service/"
+
+    - name: Install WeasyPrint system dependencies
+      apt:
+        name:
+          - libpango-1.0-0
+          - libpangocairo-1.0-0
+          - libgdk-pixbuf-2.0-0
+          - libffi-dev
+          - shared-mime-info
+          - python3-venv
+        state: present
+
+    - name: Create Python venv for CV service
+      command: python3 -m venv {{ base_dir }}/cv-service/venv
+      args:
+        creates: "{{ base_dir }}/cv-service/venv/bin/python"
+
+    - name: Install CV service Python dependencies in venv
+      pip:
+        requirements: "{{ base_dir }}/cv-service/requirements.txt"
+        virtualenv: "{{ base_dir }}/cv-service/venv"
+
+    - name: Set CV service directory ownership
+      file:
+        path: "{{ base_dir }}/cv-service"
+        owner: www-data
+        group: www-data
+        recurse: true
+
+    - name: Create CV service systemd unit
+      copy:
+        content: |
+          [Unit]
+          Description=CV Service
+          After=network.target
+
+          [Service]
+          Type=simple
+          User=www-data
+          WorkingDirectory={{ base_dir }}/cv-service
+          ExecStart={{ base_dir }}/cv-service/venv/bin/python -m uvicorn app:app --host 127.0.0.1 --port 8001
+          Restart=always
+          RestartSec=5
+
+          [Install]
+          WantedBy=multi-user.target
+        dest: /etc/systemd/system/cv-service.service
+      notify: restart cv-service
+
+    - name: Enable CV service
+      systemd:
+        name: cv-service
+        enabled: true
+        state: started
+        daemon_reload: true
+
+    # --- Deploy Nginx config ---
+    - name: Copy Nginx site config
+      copy:
+        src: ../../nginx/conf.d/asanchezbl.dev.conf
+        dest: /etc/nginx/sites-available/{{ domain }}
+      notify: reload nginx
+
+    - name: Enable Nginx site
+      file:
+        src: /etc/nginx/sites-available/{{ domain }}
+        dest: /etc/nginx/sites-enabled/{{ domain }}
+        state: link
+      notify: reload nginx
+
+    - name: Remove default Nginx site
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: reload nginx
+
+    # --- SSL with Certbot ---
+    - name: Obtain SSL certificate
+      command: >
+        certbot --nginx -d {{ domain }} -d www.{{ domain }}
+        --non-interactive --agree-tos
+        --email alexsanchezblabia@gmail.com
+        --redirect
+      
+    # --- Deploy SERP ---
+    - name: Copy SERP source
+      synchronize:
+        src: /Users/alex/Documents/GITs/SERP/
+        dest: /opt/serp/
+        rsync_opts:
+          - "--exclude=.git"
+          - "--exclude=docker/SERP-db"
+          - "--exclude=__pycache__"
+          - "--exclude=node_modules"
+
+    - name: Patch SERP with mock backend (replaces real backend + DB)
+      copy:
+        src: ../../docker/serp/mock_backend.py
+        dest: /opt/serp/backend/main.py
+
+    - name: Patch SERP requirements (minimal for mock)
+      copy:
+        src: ../../docker/serp/mock_requirements.txt
+        dest: /opt/serp/backend/requirements.txt
+
+    - name: Copy SERP docker-compose
+      copy:
+        src: ../../docker/serp/docker-compose.yml
+        dest: /opt/serp/docker-compose.yml
+
+    - name: Remove SERP .env to avoid conflicts
+      file:
+        path: /opt/serp/.env
+        state: absent
+
+    - name: Start SERP containers
+      command: docker compose up -d --build
+      args:
+        chdir: /opt/serp
+
+    # --- Deploy CatLink ---
+    - name: Copy CatLink source
+      synchronize:
+        src: /Users/alex/Documents/GITs/CatLink/
+        dest: /opt/catlink/
+        rsync_opts:
+          - "--exclude=.git"
+          - "--exclude=__pycache__"
+          - "--exclude=node_modules"
+          - "--exclude=catlink.db"
+          - "--exclude=venv"
+
+    - name: Patch CatLink agent (mock Gemini)
+      copy:
+        src: ../../docker/catlink/mock_agent_patch.py
+        dest: /opt/catlink/backend/src/agent/agent.py
+
+    - name: Patch CatLink tools (remove google.generativeai)
+      copy:
+        src: ../../docker/catlink/mock_tools_patch.py
+        dest: /opt/catlink/backend/src/agent/tools.py
+
+    - name: Patch CatLink agent init (remove prompts import)
+      copy:
+        src: ../../docker/catlink/mock_agent_init_patch.py
+        dest: /opt/catlink/backend/src/agent/__init__.py
+
+    - name: Patch CatLink frontend API base URL
+      lineinfile:
+        path: /opt/catlink/frontend/src/services/api.js
+        regexp: "^const API_BASE ="
+        line: "const API_BASE = '/demo/catlink/api';"
+
+    - name: Patch CatLink frontend WebSocket URL
+      replace:
+        path: /opt/catlink/frontend/src/hooks/useWebSocket.js
+        regexp: 'const url = `\$\{proto\}//\$\{window\.location\.host\}/ws`'
+        replace: "const url = `${proto}//${window.location.host}/demo/catlink/ws`"
+
+    - name: Patch CatLink Vite config to allow external hosts
+      replace:
+        path: /opt/catlink/frontend/vite.config.js
+        regexp: "server: \\{"
+        replace: "server: {\n    allowedHosts: true,"
+
+    - name: Copy CatLink docker-compose
+      copy:
+        src: ../../docker/catlink/docker-compose.yml
+        dest: /opt/catlink/docker-compose.yml
+
+    - name: Start CatLink containers
+      command: docker compose up -d --build
+      args:
+        chdir: /opt/catlink
+
+    # --- Demo reset cron ---
+    - name: Copy demo reset script
+      copy:
+        src: ../../scripts/reset-demos.sh
+        dest: "{{ base_dir }}/scripts/reset-demos.sh"
+        mode: '0755'
+
+    - name: Set up demo reset cron (every 6 hours)
+      cron:
+        name: "Reset demo data"
+        minute: "0"
+        hour: "*/6"
+        job: "{{ base_dir }}/scripts/reset-demos.sh >> /var/log/demo-reset.log 2>&1"
+
+  handlers:
+    - name: restart cv-service
+      systemd:
+        name: cv-service
+        state: restarted
+
+    - name: reload nginx
+      systemd:
+        name: nginx
+        state: reloaded

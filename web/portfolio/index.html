@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Alex Sanchez Blabia - Portfolio. Systems administration, cloud infrastructure, hackathon projects, and open-source contributions.">
+  <title>Portfolio - Alex Sanchez Blabia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/portfolio/style.css">
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">ASB</a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#achievements">Achievements</a>
+        <a href="/cv" class="nav-cta">CV</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="about">
+    <div class="hero-content">
+      <img src="/assets/photos/FotoCarnetASB.jpg" alt="Alex Sanchez Blabia" class="hero-avatar">
+      <h1>Alex Sanchez Blabia</h1>
+      <p class="hero-title">Systems & Network Administrator</p>
+      <p class="hero-bio">
+        I build and maintain infrastructure. From designing 10GbE networks for video production studios
+        to deploying emergency management systems at hackathons, I focus on solutions that actually work.
+        Currently finishing ASIX at iTIC Barcelona, with a background in cybersecurity from 42 Barcelona.
+      </p>
+      <div class="hero-links">
+        <a href="https://github.com/caballosanex" target="_blank" class="btn btn-outline">GitHub</a>
+        <a href="https://www.linkedin.com/in/alex-sanchez-blabia/" target="_blank" class="btn btn-outline">LinkedIn</a>
+        <a href="mailto:alexsanchezblabia@gmail.com" class="btn btn-outline">Email</a>
+        <a href="/cv" class="btn btn-primary">Download CV</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Stack -->
+  <section class="stack-section">
+    <div class="container">
+      <div class="stack-pills">
+        <span>Linux</span><span>AWS</span><span>Terraform</span><span>Ansible</span>
+        <span>Docker</span><span>Nginx</span><span>Python</span><span>C</span>
+        <span>Bash</span><span>FastAPI</span><span>React</span><span>PostgreSQL</span>
+        <span>Prometheus</span><span>Grafana</span><span>Git</span><span>Cisco IOS</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="section" id="projects">
+    <div class="container">
+      <h2 class="section-title">Projects</h2>
+
+      <!-- This Portfolio -->
+      <div class="project-card featured">
+        <div class="project-badge">Infrastructure as Code</div>
+        <h3>Cloud Portfolio Infrastructure</h3>
+        <p class="project-desc">
+          The infrastructure behind this very website. A complete AWS deployment managed with Terraform (VPC, EC2, Security Groups, Elastic IP)
+          and configured with Ansible (Nginx, Docker, SSL, fail2ban, UFW, monitoring). Everything runs on a single EC2 t4g.small instance
+          with Cloudflare DNS, Anubis WAF, and Prometheus+Grafana monitoring.
+        </p>
+        <div class="project-stack">
+          <span>Terraform</span><span>Ansible</span><span>AWS</span><span>Docker</span>
+          <span>Nginx</span><span>Certbot</span><span>Prometheus</span><span>Grafana</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/caballosanex/PortfolioCloudAWS" target="_blank" class="btn btn-sm btn-outline">View Source</a>
+        </div>
+      </div>
+
+      <!-- SERP -->
+      <div class="project-card">
+        <div class="project-badge">Hackathon - Talent Arena 2025</div>
+        <h3>SERP - Emergency Response System</h3>
+        <p class="project-desc">
+          Real-time emergency management system with GPS tracking, resource allocation (ambulances, fire trucks, police),
+          and operator coordination dashboards. Built in 36 hours at Talent Arena 2025 with Nokia network QoS integration
+          for prioritizing emergency vehicle connectivity.
+        </p>
+        <ul class="project-features">
+          <li>Interactive Leaflet maps with real-time emergency and resource tracking</li>
+          <li>Three role-based dashboards: Emergency Center, Operator, and Field Personnel</li>
+          <li>PostgreSQL database with automatic seeding and Alembic migrations</li>
+          <li>Nokia QoS API integration for emergency vehicle network prioritization</li>
+        </ul>
+        <div class="project-stack">
+          <span>FastAPI</span><span>React</span><span>Redux</span><span>PostgreSQL</span>
+          <span>Leaflet</span><span>Material-UI</span><span>Docker</span>
+        </div>
+        <div class="project-links">
+          <a href="/demo/serp/" class="btn btn-primary btn-sm">Live Demo</a>
+        </div>
+      </div>
+
+      <!-- CatLink -->
+      <div class="project-card">
+        <div class="project-badge">Hackathon - Talent Arena 2026</div>
+        <div class="project-images">
+          <img src="/assets/photos/Foto_TalentArena1.jpeg" alt="Team at Talent Arena 2026" loading="lazy">
+        </div>
+        <h3>CatLink - AI EV Charger Agent</h3>
+        <p class="project-desc">
+          AI-powered agent that manages a network of electric vehicle chargers using Nokia Network as Code APIs.
+          The agent evaluates charging requests through a multi-step verification pipeline: location verification,
+          identity check, SIM swap fraud detection, and Quality-on-Demand activation. Real-time WebSocket streaming
+          shows the AI's reasoning process live.
+        </p>
+        <ul class="project-features">
+          <li>Gemini-powered agentic AI with function calling for security verifications</li>
+          <li>Real-time WebSocket panel showing AI decision-making process</li>
+          <li>Interactive Leaflet map with charger stations across Barcelona</li>
+          <li>Nokia API integration: Location, Number Verification, SIM Swap, QoD</li>
+        </ul>
+        <div class="project-stack">
+          <span>FastAPI</span><span>React</span><span>Gemini AI</span><span>Leaflet</span>
+          <span>WebSocket</span><span>Docker</span><span>MCP Server</span>
+        </div>
+        <div class="project-links">
+          <a href="/demo/catlink/" class="btn btn-primary btn-sm">Live Demo</a>
+        </div>
+      </div>
+
+      <!-- WeatherMaster -->
+      <div class="project-card">
+        <div class="project-badge">Open Source Contributor</div>
+        <div class="project-images">
+          <img src="/assets/images/new_thumbnail.png" alt="WeatherMaster app" loading="lazy">
+        </div>
+        <h3>WeatherMaster</h3>
+        <p class="project-desc">
+          Weather app inspired by Google Pixel Weather, built with Flutter. I'm an active contributor and maintainer
+          with multiple merged pull requests improving core functionality.
+        </p>
+        <ul class="project-features">
+          <li>PR #533: Improved model picker to show temperature at a glance</li>
+          <li>PR #534: Proper handling of null values in daily weather lists</li>
+          <li>Implemented fallback logic for missing data fields</li>
+          <li>Performance optimizations across the codebase</li>
+        </ul>
+        <div class="project-stack">
+          <span>Flutter</span><span>Dart</span><span>Android</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/PranshulGG/WeatherMaster" target="_blank" class="btn btn-sm btn-outline">View Repo</a>
+        </div>
+      </div>
+
+      <!-- mfkey -->
+      <div class="project-card">
+        <div class="project-badge">Open Source - Embedded C</div>
+        <h3>mfkey - Flipper Zero Performance Optimization</h3>
+        <p class="project-desc">
+          Contributed a critical performance optimization to the mfkey application for Flipper Zero, achieving a
+          <strong>70x speed improvement</strong> in Mifare Classic key recovery. The optimization involved implementing
+          write buffering for Static Encrypted Nested key candidates on a device with only 13 KB of free RAM.
+        </p>
+        <div class="code-block">
+          <div class="code-title">Key optimization: Write buffering instead of per-key disk writes</div>
+          <pre><code>// Before: Individual write per key candidate (slow)
+keys_dict_add_key(program_state->cuid_dict, n->key.data, sizeof(MfClassicKey));
+
+// After: Buffer keys in RAM, flush in batches (70x faster)
+program_state->key_buffer[program_state->key_buffer_count] = n->key;
+program_state->key_buffer_count++;
+if (program_state->key_buffer_count >= program_state->key_buffer_size) {
+    flush_key_buffer(program_state);  // Batch write to stream
+}</code></pre>
+        </div>
+        <ul class="project-features">
+          <li>Batch write buffering with pre-allocated memory and manual hex conversion</li>
+          <li>Dynamic buffer sizing based on available RAM (19 bytes per key total)</li>
+          <li>Direct stream manipulation bypassing the dictionary API overhead</li>
+          <li>Memory-safe implementation with proper cleanup on all exit paths</li>
+        </ul>
+        <div class="project-stack">
+          <span>C</span><span>ARM</span><span>Embedded</span><span>Memory Management</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/noproto/xero-firmware/commit/2125e21" target="_blank" class="btn btn-sm btn-outline">View Commit</a>
+        </div>
+      </div>
+
+      <!-- Apartaments Miquel -->
+      <div class="project-card">
+        <div class="project-badge">Production Client Project</div>
+        <h3>Apartaments Miquel</h3>
+        <p class="project-desc">
+          Tourist apartment website built for a real client. Fully responsive, SEO-optimized, currently live
+          and in active use. Delivered as a complete product with galleries, property details, and booking information.
+        </p>
+        <div class="project-stack">
+          <span>HTML</span><span>CSS</span><span>JavaScript</span><span>SEO</span>
+        </div>
+        <div class="project-links">
+          <a href="https://apartamentsjmiquel.com/" target="_blank" class="btn btn-sm btn-outline">Visit Site</a>
+        </div>
+      </div>
+
+      <!-- NAS Proposal -->
+      <div class="project-card">
+        <div class="project-badge">Professional Consulting</div>
+        <h3>Corporate NAS & Network Design - Ismael Prego</h3>
+        <p class="project-desc">
+          Professional hardware implementation proposal for a corporate NAS oriented to collaborative 4K video editing.
+          Designed for Ismael Prego (Spanish tech content creator). Included complete network architecture, hardware
+          evaluation, bandwidth analysis, and detailed budgeting.
+        </p>
+        <ul class="project-features">
+          <li>Requirements analysis: 3-4 TB/month of 4K footage at 140 Mbps, 3+ simultaneous editors</li>
+          <li>Hardware comparison: Synology RS422+ vs RS2423RP+, Ubiquiti switching, PCIe NICs</li>
+          <li>Bandwidth proof: 10GbE Ethernet covers 5+ simultaneous 4K streams without fiber</li>
+          <li>RAID6 configuration: 96 TB raw / 80 TB usable, tolerates 2 simultaneous disk failures</li>
+          <li>Complete budget: 4,700 - 7,300 EUR across 4 configurations + UPS protection</li>
+        </ul>
+        <div class="project-stack">
+          <span>Synology</span><span>Ubiquiti</span><span>10GbE</span><span>RAID</span>
+          <span>Network Design</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Achievements -->
+  <section class="section section-dark" id="achievements">
+    <div class="container">
+      <h2 class="section-title">Achievements & Certifications</h2>
+
+      <div class="achievement-card">
+        <div class="achievement-images">
+          <img src="/assets/photos/FotoAWSGDay1.jpeg" alt="AWS GameDay team" loading="lazy">
+          <img src="/assets/photos/FotoAWSGDay2.jpeg" alt="AWS GameDay event" loading="lazy">
+        </div>
+        <h3>AWS GameDay 2025 - National Runner-up</h3>
+        <p>
+          Second place nationally in the AWS GameDay competition with team AMEP from Institut TIC de Barcelona.
+          Solved real-world cloud computing challenges in a competitive environment, demonstrating teamwork and
+          technical competence in AWS services.
+        </p>
+        <p class="achievement-team">Team: Marcos Gongora, Eduardo Badoyan, Sergio Herruzo & Alex Sanchez Blabia</p>
+      </div>
+
+      <div class="certs-grid">
+        <div class="cert-card">
+          <img src="/assets/certificates/ccna-introduction-to-networks.png" alt="CCNA" loading="lazy">
+          <span>CCNA: Intro to Networks</span>
+          <span class="cert-date">Feb 2025</span>
+        </div>
+        <div class="cert-card">
+          <img src="/assets/certificates/introduction-to-cybersecurity.png" alt="Cybersecurity" loading="lazy">
+          <span>Intro to Cybersecurity</span>
+          <span class="cert-date">Aug 2023</span>
+        </div>
+        <div class="cert-card">
+          <img src="/assets/certificates/42 Barcelona Fundación Telefónica - Bootcamp Cyberseguridad 42 Barcelona - 2023-05-25.png" alt="42 Bootcamp" loading="lazy">
+          <span>Cybersecurity Bootcamp</span>
+          <span class="cert-date">May 2023</span>
+        </div>
+        <div class="cert-card">
+          <img src="/assets/certificates/FirstFront.jpg" alt="B2 First" loading="lazy">
+          <span>B2 First (Cambridge)</span>
+          <span class="cert-date">Jul 2020</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>Built and deployed by Alex Sanchez Blabia with Terraform, Ansible & AWS</p>
+      <p class="footer-links">
+        <a href="/">Home</a>
+        <a href="/cv">CV</a>
+        <a href="https://github.com/caballosanex" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/alex-sanchez-blabia/" target="_blank">LinkedIn</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

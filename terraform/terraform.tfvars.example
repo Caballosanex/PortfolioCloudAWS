@@ -1,0 +1,8 @@
+aws_region           = "eu-west-1"
+instance_type        = "t4g.small"
+ssh_port             = 2222
+ssh_public_key_path  = "~/.ssh/id_rsa.pub"
+domain               = "asanchezbl.dev"
+cloudflare_api_token = "your-cloudflare-api-token"
+cloudflare_zone_id   = "your-cloudflare-zone-id"
+monthly_budget       = 15

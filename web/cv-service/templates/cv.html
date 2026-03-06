@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    @page {
+      size: A4;
+      margin: 18mm 20mm 18mm 20mm;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 9.5pt;
+      line-height: 1.45;
+      color: #1a1a2e;
+    }
+
+    /* --- Header --- */
+    .header {
+      margin-bottom: 14pt;
+      padding-bottom: 10pt;
+      border-bottom: 2.5pt solid #4f46e5;
+    }
+
+    .name {
+      font-size: 22pt;
+      font-weight: 700;
+      color: #1a1a2e;
+      letter-spacing: -0.02em;
+      margin-bottom: 2pt;
+    }
+
+    .title {
+      font-size: 11pt;
+      font-weight: 500;
+      color: #4f46e5;
+      margin-bottom: 8pt;
+    }
+
+    .contact {
+      font-size: 8.5pt;
+      color: #4a4a68;
+      line-height: 1.6;
+    }
+
+    .contact a {
+      color: #4a4a68;
+      text-decoration: none;
+    }
+
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6pt 18pt;
+    }
+
+    /* --- Summary --- */
+    .summary {
+      margin-bottom: 12pt;
+      font-size: 9pt;
+      color: #3a3a5a;
+      line-height: 1.55;
+    }
+
+    /* --- Sections --- */
+    .section {
+      margin-bottom: 12pt;
+    }
+
+    .section-title {
+      font-size: 11pt;
+      font-weight: 700;
+      color: #1a1a2e;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding-bottom: 3pt;
+      border-bottom: 1.2pt solid #e5e5ee;
+      margin-bottom: 8pt;
+    }
+
+    /* --- Experience & Education entries --- */
+    .entry {
+      margin-bottom: 10pt;
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1pt;
+    }
+
+    .entry-title {
+      font-size: 10pt;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+
+    .entry-date {
+      font-size: 8.5pt;
+      color: #6b6b8a;
+      white-space: nowrap;
+    }
+
+    .entry-subtitle {
+      font-size: 9pt;
+      color: #4f46e5;
+      font-weight: 500;
+      margin-bottom: 3pt;
+    }
+
+    .entry-location {
+      font-size: 8.5pt;
+      color: #6b6b8a;
+      font-style: italic;
+    }
+
+    .entry-details {
+      font-size: 8.5pt;
+      color: #4a4a68;
+      margin-top: 2pt;
+    }
+
+    ul {
+      padding-left: 14pt;
+      margin-top: 2pt;
+    }
+
+    li {
+      margin-bottom: 2pt;
+      color: #3a3a5a;
+    }
+
+    /* --- Skills --- */
+    .skills-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 4pt;
+    }
+
+    .skill-row {
+      display: flex;
+      gap: 6pt;
+    }
+
+    .skill-label {
+      font-weight: 600;
+      color: #1a1a2e;
+      min-width: 90pt;
+      font-size: 9pt;
+    }
+
+    .skill-value {
+      color: #3a3a5a;
+      font-size: 9pt;
+    }
+
+    /* --- Certifications --- */
+    .cert-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 3pt;
+    }
+
+    .cert-item {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .cert-name {
+      font-weight: 500;
+      font-size: 9pt;
+    }
+
+    .cert-issuer {
+      color: #6b6b8a;
+      font-size: 8.5pt;
+    }
+
+    .cert-date {
+      color: #6b6b8a;
+      font-size: 8.5pt;
+      white-space: nowrap;
+    }
+
+    /* --- Languages --- */
+    .lang-row {
+      display: flex;
+      gap: 24pt;
+      flex-wrap: wrap;
+    }
+
+    .lang-item {
+      font-size: 9pt;
+    }
+
+    .lang-name {
+      font-weight: 600;
+    }
+
+    .lang-level {
+      color: #6b6b8a;
+    }
+
+    /* --- Achievements --- */
+    .achievements li {
+      font-size: 9pt;
+      margin-bottom: 3pt;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header with name and contact - in body, not header/footer for ATS -->
+  <div class="header">
+    <div class="name">{{ cv.personal.name }}</div>
+    <div class="title">{{ cv.personal.title }}</div>
+    <div class="contact">
+      <div class="contact-row">
+        <span>{{ cv.personal.email }}</span>
+        <span>{{ cv.personal.phone }}</span>
+        <span>{{ cv.personal.location }}</span>
+        <span><a href="https://{{ cv.personal.linkedin }}">{{ cv.personal.linkedin }}</a></span>
+        <span><a href="https://{{ cv.personal.github }}">{{ cv.personal.github }}</a></span>
+        <span><a href="https://{{ cv.personal.website }}">{{ cv.personal.website }}</a></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary">{{ cv.summary }}</div>
+
+  <!-- Experience -->
+  {% if lang == 'es' %}{% set exp_title = "Experiencia Profesional" %}
+  {% elif lang == 'ca' %}{% set exp_title = "Experiencia Professional" %}
+  {% else %}{% set exp_title = "Professional Experience" %}{% endif %}
+  <div class="section">
+    <div class="section-title">{{ exp_title }}</div>
+    {% for job in cv.experience %}
+    <div class="entry">
+      <div class="entry-header">
+        <span class="entry-title">{{ job.title }}</span>
+        <span class="entry-date">{{ job.date }}</span>
+      </div>
+      <div class="entry-subtitle">{{ job.company }} <span class="entry-location">| {{ job.location }}</span></div>
+      <ul>
+        {% for task in job.tasks %}
+        <li>{{ task }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Education -->
+  {% if lang == 'es' %}{% set edu_title = "Formacion Academica" %}
+  {% elif lang == 'ca' %}{% set edu_title = "Formacio Academica" %}
+  {% else %}{% set edu_title = "Education" %}{% endif %}
+  <div class="section">
+    <div class="section-title">{{ edu_title }}</div>
+    {% for edu in cv.education %}
+    <div class="entry">
+      <div class="entry-header">
+        <span class="entry-title">{{ edu.degree }}</span>
+        <span class="entry-date">{{ edu.date }}</span>
+      </div>
+      <div class="entry-subtitle">{{ edu.institution }} <span class="entry-location">| {{ edu.location }}</span></div>
+      {% if edu.details %}
+      <div class="entry-details">{{ edu.details }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Skills -->
+  {% if lang == 'es' %}{% set skills_title = "Habilidades Tecnicas" %}
+  {% elif lang == 'ca' %}{% set skills_title = "Habilitats Tecniques" %}
+  {% else %}{% set skills_title = "Technical Skills" %}{% endif %}
+  <div class="section">
+    <div class="section-title">{{ skills_title }}</div>
+    <div class="skills-grid">
+      {% set labels = {
+        'systems': {'en': 'Systems', 'es': 'Sistemas', 'ca': 'Sistemes'},
+        'networking': {'en': 'Networking', 'es': 'Redes', 'ca': 'Xarxes'},
+        'cloud': {'en': 'Cloud/IaC', 'es': 'Cloud/IaC', 'ca': 'Cloud/IaC'},
+        'containers': {'en': 'Containers', 'es': 'Contenedores', 'ca': 'Contenidors'},
+        'security': {'en': 'Security', 'es': 'Seguridad', 'ca': 'Seguretat'},
+        'development': {'en': 'Development', 'es': 'Desarrollo', 'ca': 'Desenvolupament'},
+        'monitoring': {'en': 'Monitoring', 'es': 'Monitorizacion', 'ca': 'Monitoritzacio'},
+        'other': {'en': 'Other', 'es': 'Otros', 'ca': 'Altres'}
+      } %}
+      {% for key, value in cv.skills.items() %}
+      <div class="skill-row">
+        <span class="skill-label">{{ labels[key][lang] }}:</span>
+        <span class="skill-value">{{ value }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Certifications -->
+  {% if lang == 'es' %}{% set cert_title = "Certificaciones" %}
+  {% elif lang == 'ca' %}{% set cert_title = "Certificacions" %}
+  {% else %}{% set cert_title = "Certifications" %}{% endif %}
+  <div class="section">
+    <div class="section-title">{{ cert_title }}</div>
+    <div class="cert-grid">
+      {% for cert in cv.certifications %}
+      <div class="cert-item">
+        <span><span class="cert-name">{{ cert.name }}</span> <span class="cert-issuer">- {{ cert.issuer }}</span></span>
+        <span class="cert-date">{{ cert.date }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Languages -->
+  {% if lang == 'es' %}{% set lang_title = "Idiomas" %}
+  {% elif lang == 'ca' %}{% set lang_title = "Idiomes" %}
+  {% else %}{% set lang_title = "Languages" %}{% endif %}
+  <div class="section">
+    <div class="section-title">{{ lang_title }}</div>
+    <div class="lang-row">
+      {% for l in cv.languages %}
+      <div class="lang-item">
+        <span class="lang-name">{{ l.lang }}</span>: <span class="lang-level">{{ l.level }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Achievements -->
+  {% if lang == 'es' %}{% set ach_title = "Logros Destacados" %}
+  {% elif lang == 'ca' %}{% set ach_title = "Fites Destacades" %}
+  {% else %}{% set ach_title = "Key Achievements" %}{% endif %}
+  <div class="section">
+    <div class="section-title">{{ ach_title }}</div>
+    <ul class="achievements">
+      {% for ach in cv.achievements %}
+      <li>{{ ach }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</body>
+</html>
