@@ -5,9 +5,7 @@
 
 services:
   backend:
-    build:
-      context: /opt/catlink/backend
-      dockerfile: Dockerfile
+    image: docker.io/caballosanex/catlink-backend:latest
     container_name: catlink-backend
     restart: unless-stopped
     ports:
@@ -26,9 +24,7 @@ services:
       - catlink-net
 
   frontend:
-    build:
-      context: /opt/catlink/frontend
-      dockerfile: Dockerfile
+    image: docker.io/caballosanex/catlink-frontend:latest
     container_name: catlink-frontend
     restart: unless-stopped
     ports:

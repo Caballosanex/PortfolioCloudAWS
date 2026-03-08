@@ -1,0 +1,15 @@
+---
+- name: Create portfolio directory
+  file:
+    path: "{{ web_dir }}/portfolio"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Copy portfolio
+  copy:
+    src: "{{ playbook_dir }}/../../web/portfolio/"
+    dest: "{{ web_dir }}/portfolio/"
+    owner: www-data
+    group: www-data

@@ -14,16 +14,39 @@
 
     body {
       font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-      font-size: 9.5pt;
+      font-size: 10pt;
       line-height: 1.45;
       color: #1a1a2e;
     }
 
     /* --- Header --- */
     .header {
+      display: table;
+      width: 100%;
       margin-bottom: 14pt;
       padding-bottom: 10pt;
       border-bottom: 2.5pt solid #4f46e5;
+    }
+
+    .header-photo-wrap {
+      display: table-cell;
+      width: 79pt;
+      vertical-align: middle;
+      padding-right: 14pt;
+    }
+
+    .header-photo {
+      display: block;
+      width: 65pt;
+      height: 65pt;
+      border-radius: 50%;
+      border: 2.5pt solid #4f46e5;
+      object-fit: cover;
+    }
+
+    .header-text {
+      display: table-cell;
+      vertical-align: middle;
     }
 
     .name {
@@ -52,10 +75,17 @@
       text-decoration: none;
     }
 
-    .contact-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6pt 18pt;
+    .contact-row span {
+      display: inline;
+    }
+
+    .contact-row span::after {
+      content: " · ";
+      color: #9a9abe;
+    }
+
+    .contact-row span:last-child::after {
+      content: "";
     }
 
     /* --- Summary --- */
@@ -87,23 +117,27 @@
       margin-bottom: 10pt;
     }
 
+    /* Table layout: title left, date right */
     .entry-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
+      display: table;
+      width: 100%;
       margin-bottom: 1pt;
     }
 
     .entry-title {
+      display: table-cell;
       font-size: 10pt;
       font-weight: 600;
       color: #1a1a2e;
     }
 
     .entry-date {
+      display: table-cell;
       font-size: 8.5pt;
       color: #6b6b8a;
       white-space: nowrap;
+      text-align: right;
+      width: 1%;
     }
 
     .entry-subtitle {
@@ -135,40 +169,36 @@
       color: #3a3a5a;
     }
 
-    /* --- Skills --- */
-    .skills-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 4pt;
-    }
-
+    /* --- Skills: table layout, label left, value right --- */
     .skill-row {
-      display: flex;
-      gap: 6pt;
+      display: table;
+      width: 100%;
+      margin-bottom: 4pt;
     }
 
     .skill-label {
+      display: table-cell;
       font-weight: 600;
       color: #1a1a2e;
-      min-width: 90pt;
+      width: 90pt;
       font-size: 9pt;
     }
 
     .skill-value {
+      display: table-cell;
       color: #3a3a5a;
       font-size: 9pt;
     }
 
-    /* --- Certifications --- */
-    .cert-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 3pt;
+    /* --- Certifications: table layout, name left, date right --- */
+    .cert-item {
+      display: table;
+      width: 100%;
+      margin-bottom: 3pt;
     }
 
-    .cert-item {
-      display: flex;
-      justify-content: space-between;
+    .cert-item-main {
+      display: table-cell;
     }
 
     .cert-name {
@@ -182,20 +212,27 @@
     }
 
     .cert-date {
+      display: table-cell;
       color: #6b6b8a;
       font-size: 8.5pt;
       white-space: nowrap;
+      text-align: right;
+      width: 1%;
+      vertical-align: top;
     }
 
     /* --- Languages --- */
-    .lang-row {
-      display: flex;
-      gap: 24pt;
-      flex-wrap: wrap;
+    .lang-item {
+      display: inline;
     }
 
-    .lang-item {
-      font-size: 9pt;
+    .lang-item::after {
+      content: " · ";
+      color: #9a9abe;
+    }
+
+    .lang-item:last-child::after {
+      content: "";
     }
 
     .lang-name {
@@ -216,16 +253,21 @@
 <body>
   <!-- Header with name and contact - in body, not header/footer for ATS -->
   <div class="header">
-    <div class="name">{{ cv.personal.name }}</div>
-    <div class="title">{{ cv.personal.title }}</div>
-    <div class="contact">
-      <div class="contact-row">
-        <span>{{ cv.personal.email }}</span>
-        <span>{{ cv.personal.phone }}</span>
-        <span>{{ cv.personal.location }}</span>
-        <span><a href="https://{{ cv.personal.linkedin }}">{{ cv.personal.linkedin }}</a></span>
-        <span><a href="https://{{ cv.personal.github }}">{{ cv.personal.github }}</a></span>
-        <span><a href="https://{{ cv.personal.website }}">{{ cv.personal.website }}</a></span>
+    <div class="header-photo-wrap">
+      <img src="assets/photo.webp" alt="" class="header-photo">
+    </div>
+    <div class="header-text">
+      <div class="name">{{ cv.personal.name }}</div>
+      <div class="title">{{ cv.personal.title }}</div>
+      <div class="contact">
+        <div class="contact-row">
+          <span>{{ cv.personal.email }}</span>
+          <span>{{ cv.personal.phone }}</span>
+          <span>{{ cv.personal.location }}</span>
+          <span><a href="https://{{ cv.personal.linkedin }}">{{ cv.personal.linkedin }}</a></span>
+          <span><a href="https://{{ cv.personal.github }}">{{ cv.personal.github }}</a></span>
+          <span><a href="https://{{ cv.personal.website }}">{{ cv.personal.website }}</a></span>
+        </div>
       </div>
     </div>
   </div>
@@ -281,24 +323,22 @@
   {% else %}{% set skills_title = "Technical Skills" %}{% endif %}
   <div class="section">
     <div class="section-title">{{ skills_title }}</div>
-    <div class="skills-grid">
-      {% set labels = {
-        'systems': {'en': 'Systems', 'es': 'Sistemas', 'ca': 'Sistemes'},
-        'networking': {'en': 'Networking', 'es': 'Redes', 'ca': 'Xarxes'},
-        'cloud': {'en': 'Cloud/IaC', 'es': 'Cloud/IaC', 'ca': 'Cloud/IaC'},
-        'containers': {'en': 'Containers', 'es': 'Contenedores', 'ca': 'Contenidors'},
-        'security': {'en': 'Security', 'es': 'Seguridad', 'ca': 'Seguretat'},
-        'development': {'en': 'Development', 'es': 'Desarrollo', 'ca': 'Desenvolupament'},
-        'monitoring': {'en': 'Monitoring', 'es': 'Monitorizacion', 'ca': 'Monitoritzacio'},
-        'other': {'en': 'Other', 'es': 'Otros', 'ca': 'Altres'}
-      } %}
-      {% for key, value in cv.skills.items() %}
-      <div class="skill-row">
-        <span class="skill-label">{{ labels[key][lang] }}:</span>
-        <span class="skill-value">{{ value }}</span>
-      </div>
-      {% endfor %}
+    {% set labels = {
+      'systems': {'en': 'Systems', 'es': 'Sistemas', 'ca': 'Sistemes'},
+      'networking': {'en': 'Networking', 'es': 'Redes', 'ca': 'Xarxes'},
+      'cloud': {'en': 'Cloud/IaC', 'es': 'Cloud/IaC', 'ca': 'Cloud/IaC'},
+      'containers': {'en': 'Containers', 'es': 'Contenedores', 'ca': 'Contenidors'},
+      'security': {'en': 'Security', 'es': 'Seguridad', 'ca': 'Seguretat'},
+      'development': {'en': 'Development', 'es': 'Desarrollo', 'ca': 'Desenvolupament'},
+      'monitoring': {'en': 'Monitoring', 'es': 'Monitorizacion', 'ca': 'Monitoritzacio'},
+      'other': {'en': 'Other', 'es': 'Otros', 'ca': 'Altres'}
+    } %}
+    {% for key, value in cv.skills.items() %}
+    <div class="skill-row">
+      <span class="skill-label">{{ labels[key][lang] }}:</span>
+      <span class="skill-value">{{ value }}</span>
     </div>
+    {% endfor %}
   </div>
 
   <!-- Certifications -->
@@ -307,14 +347,12 @@
   {% else %}{% set cert_title = "Certifications" %}{% endif %}
   <div class="section">
     <div class="section-title">{{ cert_title }}</div>
-    <div class="cert-grid">
-      {% for cert in cv.certifications %}
-      <div class="cert-item">
-        <span><span class="cert-name">{{ cert.name }}</span> <span class="cert-issuer">- {{ cert.issuer }}</span></span>
-        <span class="cert-date">{{ cert.date }}</span>
-      </div>
-      {% endfor %}
+    {% for cert in cv.certifications %}
+    <div class="cert-item">
+      <span class="cert-item-main"><span class="cert-name">{{ cert.name }}</span> <span class="cert-issuer">- {{ cert.issuer }}</span></span>
+      <span class="cert-date">{{ cert.date }}</span>
     </div>
+    {% endfor %}
   </div>
 
   <!-- Languages -->
@@ -323,11 +361,11 @@
   {% else %}{% set lang_title = "Languages" %}{% endif %}
   <div class="section">
     <div class="section-title">{{ lang_title }}</div>
-    <div class="lang-row">
+    <div>
       {% for l in cv.languages %}
-      <div class="lang-item">
+      <span class="lang-item">
         <span class="lang-name">{{ l.lang }}</span>: <span class="lang-level">{{ l.level }}</span>
-      </div>
+      </span>
       {% endfor %}
     </div>
   </div>

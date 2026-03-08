@@ -1,0 +1,21 @@
+---
+- name: Create SERP directory
+  file:
+    path: /opt/serp
+    state: directory
+    mode: '0755'
+
+- name: Copy SERP docker-compose
+  copy:
+    src: "{{ playbook_dir }}/../../docker/serp/docker-compose.yml"
+    dest: /opt/serp/docker-compose.yml
+
+- name: Pull SERP images
+  command: docker compose pull
+  args:
+    chdir: /opt/serp
+
+- name: Start SERP containers
+  command: docker compose up -d --force-recreate
+  args:
+    chdir: /opt/serp

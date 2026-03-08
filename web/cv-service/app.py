@@ -19,9 +19,9 @@ app = FastAPI(title="CV Service")
 jinja_env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)))
 
 LANGUAGES = {
-    "es": {"label": "Castellano", "file_suffix": "ES"},
+    "es": {"label": "Spanish", "file_suffix": "ES"},
     "en": {"label": "English", "file_suffix": "EN"},
-    "ca": {"label": "Catala", "file_suffix": "CA"},
+    "ca": {"label": "Catalan", "file_suffix": "CA"},
 }
 
 
@@ -80,6 +80,20 @@ async def cv_page(request: Request):
     count = increment_visits()
     template = jinja_env.get_template("cv_page.html")
     return HTMLResponse(template.render(visit_count=count, languages=LANGUAGES))
+
+
+@app.get("/preview/{lang}")
+async def preview_cv(lang: str):
+    """Serve CV PDF inline for browser preview."""
+    if lang not in LANGUAGES:
+        return {"error": "Language not supported. Use: es, en, ca"}
+
+    pdf_path = generate_pdf(lang)
+    return FileResponse(
+        path=str(pdf_path),
+        media_type="application/pdf",
+        headers={"Content-Disposition": "inline"},
+    )
 
 
 @app.get("/download/{lang}")

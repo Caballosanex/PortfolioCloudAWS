@@ -4,9 +4,7 @@
 
 services:
   backend:
-    build:
-      context: /opt/serp/backend
-      dockerfile: Dockerfile
+    image: docker.io/caballosanex/serp-backend:latest
     container_name: serp-backend
     restart: unless-stopped
     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5001"]
@@ -18,9 +16,7 @@ services:
       - serp-net
 
   frontend:
-    build:
-      context: /opt/serp/frontend
-      dockerfile: Dockerfile
+    image: docker.io/caballosanex/serp-frontend:latest
     container_name: serp-frontend
     restart: unless-stopped
     ports:

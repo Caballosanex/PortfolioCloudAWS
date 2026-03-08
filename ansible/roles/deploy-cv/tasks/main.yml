@@ -1,0 +1,72 @@
+---
+- name: Create CV service directory
+  file:
+    path: "{{ base_dir }}/cv-service"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Copy CV service
+  copy:
+    src: "{{ playbook_dir }}/../../web/cv-service/"
+    dest: "{{ base_dir }}/cv-service/"
+  notify: restart cv-service
+
+- name: Install WeasyPrint system dependencies
+  apt:
+    name:
+      - libpango-1.0-0
+      - libpangocairo-1.0-0
+      - libgdk-pixbuf-2.0-0
+      - libffi-dev
+      - shared-mime-info
+      - fonts-liberation
+      - fonts-dejavu-core
+      - libglib2.0-0
+      - libgobject-2.0-0
+    state: present
+
+- name: Create Python venv for CV service
+  command: python3 -m venv {{ base_dir }}/cv-service/venv
+  args:
+    creates: "{{ base_dir }}/cv-service/venv/bin/python"
+
+- name: Install CV service Python dependencies in venv
+  pip:
+    requirements: "{{ base_dir }}/cv-service/requirements.txt"
+    virtualenv: "{{ base_dir }}/cv-service/venv"
+
+- name: Set CV service directory ownership
+  file:
+    path: "{{ base_dir }}/cv-service"
+    owner: www-data
+    group: www-data
+    recurse: true
+
+- name: Create CV service systemd unit
+  copy:
+    content: |
+      [Unit]
+      Description=CV Service
+      After=network.target
+
+      [Service]
+      Type=simple
+      User=www-data
+      WorkingDirectory={{ base_dir }}/cv-service
+      ExecStart={{ base_dir }}/cv-service/venv/bin/python -m uvicorn app:app --host 127.0.0.1 --port 8001
+      Restart=always
+      RestartSec=5
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/cv-service.service
+  notify: restart cv-service
+
+- name: Enable CV service
+  systemd:
+    name: cv-service
+    enabled: true
+    state: started
+    daemon_reload: true

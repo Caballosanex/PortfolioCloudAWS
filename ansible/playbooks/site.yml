@@ -1,7 +1,6 @@
 ---
-# Main playbook - orchestrates the full server setup
-# Usage: ansible-playbook playbooks/site.yml
-
+# Main playbook - full server setup in one run
+# Usage: cd ansible && ansible-playbook playbooks/site.yml
 - name: Base system setup
   hosts: portfolio
   become: true
@@ -11,7 +10,6 @@
     - docker
     - nginx
     - certbot
-    - monitoring
 
 - name: Deploy applications
   hosts: portfolio
@@ -22,4 +20,5 @@
     - deploy-portfolio
     - deploy-serp
     - deploy-catlink
+    - demo-reset
     - anubis

@@ -5,11 +5,6 @@
   hosts: portfolio
   become: true
 
-  vars:
-    base_dir: /opt/portfolio
-    web_dir: /var/www
-    domain: asanchezbl.dev
-
   tasks:
     # --- Create directories ---
     - name: Create web directories
@@ -114,6 +109,11 @@
         state: started
         daemon_reload: true
 
+    # --- Deploy Anubis WAF ---
+    - name: Deploy Anubis WAF
+      include_role:
+        name: anubis
+
     # --- Deploy Nginx config ---
     - name: Copy Nginx site config
       copy:
@@ -143,93 +143,38 @@
         --redirect
       
     # --- Deploy SERP ---
-    - name: Copy SERP source
-      synchronize:
-        src: /Users/alex/Documents/GITs/SERP/
-        dest: /opt/serp/
-        rsync_opts:
-          - "--exclude=.git"
-          - "--exclude=docker/SERP-db"
-          - "--exclude=__pycache__"
-          - "--exclude=node_modules"
-
-    - name: Patch SERP with mock backend (replaces real backend + DB)
-      copy:
-        src: ../../docker/serp/mock_backend.py
-        dest: /opt/serp/backend/main.py
-
-    - name: Patch SERP requirements (minimal for mock)
-      copy:
-        src: ../../docker/serp/mock_requirements.txt
-        dest: /opt/serp/backend/requirements.txt
+    - name: Create SERP directory
+      file:
+        path: /opt/serp
+        state: directory
 
     - name: Copy SERP docker-compose
       copy:
         src: ../../docker/serp/docker-compose.yml
         dest: /opt/serp/docker-compose.yml
 
-    - name: Remove SERP .env to avoid conflicts
-      file:
-        path: /opt/serp/.env
-        state: absent
-
-    - name: Start SERP containers
-      command: docker compose up -d --build
+    - name: Pull and start SERP containers
+      shell: |
+        docker compose pull
+        docker compose up -d
       args:
         chdir: /opt/serp
 
     # --- Deploy CatLink ---
-    - name: Copy CatLink source
-      synchronize:
-        src: /Users/alex/Documents/GITs/CatLink/
-        dest: /opt/catlink/
-        rsync_opts:
-          - "--exclude=.git"
-          - "--exclude=__pycache__"
-          - "--exclude=node_modules"
-          - "--exclude=catlink.db"
-          - "--exclude=venv"
-
-    - name: Patch CatLink agent (mock Gemini)
-      copy:
-        src: ../../docker/catlink/mock_agent_patch.py
-        dest: /opt/catlink/backend/src/agent/agent.py
-
-    - name: Patch CatLink tools (remove google.generativeai)
-      copy:
-        src: ../../docker/catlink/mock_tools_patch.py
-        dest: /opt/catlink/backend/src/agent/tools.py
-
-    - name: Patch CatLink agent init (remove prompts import)
-      copy:
-        src: ../../docker/catlink/mock_agent_init_patch.py
-        dest: /opt/catlink/backend/src/agent/__init__.py
-
-    - name: Patch CatLink frontend API base URL
-      lineinfile:
-        path: /opt/catlink/frontend/src/services/api.js
-        regexp: "^const API_BASE ="
-        line: "const API_BASE = '/demo/catlink/api';"
-
-    - name: Patch CatLink frontend WebSocket URL
-      replace:
-        path: /opt/catlink/frontend/src/hooks/useWebSocket.js
-        regexp: 'const url = `\$\{proto\}//\$\{window\.location\.host\}/ws`'
-        replace: "const url = `${proto}//${window.location.host}/demo/catlink/ws`"
-
-    - name: Patch CatLink Vite config to allow external hosts
-      replace:
-        path: /opt/catlink/frontend/vite.config.js
-        regexp: "server: \\{"
-        replace: "server: {\n    allowedHosts: true,"
+    - name: Create CatLink directory
+      file:
+        path: /opt/catlink
+        state: directory
 
     - name: Copy CatLink docker-compose
       copy:
         src: ../../docker/catlink/docker-compose.yml
         dest: /opt/catlink/docker-compose.yml
 
-    - name: Start CatLink containers
-      command: docker compose up -d --build
+    - name: Pull and start CatLink containers
+      shell: |
+        docker compose pull
+        docker compose up -d
       args:
         chdir: /opt/catlink
 

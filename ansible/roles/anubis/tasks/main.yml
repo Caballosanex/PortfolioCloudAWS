@@ -1,0 +1,68 @@
+---
+- name: Download Anubis tarball
+  get_url:
+    url: "https://github.com/TecharoHQ/anubis/releases/download/v{{ anubis_version }}/anubis-{{ anubis_version }}-linux-{{ arch }}.tar.gz"
+    dest: /tmp/anubis.tar.gz
+    checksum: "sha256:1954f02cffa95b217502b1f0786ae2b2d4b41a255a91b0a595ccadc782fa03db"
+
+- name: Remove stale Anubis extraction directory
+  file:
+    path: /tmp/anubis
+    state: absent
+
+- name: Extract Anubis
+  unarchive:
+    src: /tmp/anubis.tar.gz
+    dest: /tmp/
+    remote_src: true
+
+- name: Find Anubis binary in extracted files
+  find:
+    paths: /tmp
+    patterns: "anubis"
+    recurse: true
+    file_type: file
+  register: anubis_binary
+
+- name: Install Anubis binary
+  copy:
+    src: "{{ anubis_binary.files[0].path }}"
+    dest: /usr/local/bin/anubis
+    mode: '0755'
+    remote_src: true
+  when: anubis_binary.files | length > 0
+  notify: restart anubis
+
+- name: Create Anubis systemd unit
+  copy:
+    content: |
+      [Unit]
+      Description=Anubis PoW WAF
+      After=network.target nginx.service
+
+      [Service]
+      Type=simple
+      ExecStart=/usr/local/bin/anubis \
+        --metrics-bind 127.0.0.1:{{ anubis_metrics_port }} \
+        --bind 127.0.0.1:{{ anubis_port }} \
+        --target http://127.0.0.1:8080 \
+        --difficulty {{ anubis_difficulty }}
+      Restart=always
+      RestartSec=5
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/anubis.service
+  notify: restart anubis
+
+- name: Enable Anubis
+  systemd:
+    name: anubis
+    enabled: true
+    state: started
+    daemon_reload: true
+
+- name: Clean up Anubis download
+  file:
+    path: /tmp/anubis.tar.gz
+    state: absent
