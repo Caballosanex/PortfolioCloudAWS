@@ -1,0 +1,5 @@
+---
+- name: restart cv-service
+  systemd:
+    name: cv-service
+    state: restarted

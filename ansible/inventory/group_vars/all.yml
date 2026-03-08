@@ -1,0 +1,14 @@
+---
+# Shared variables for all roles
+domain: asanchezbl.dev
+certbot_email: alexsanchezblabia@gmail.com
+ssh_port: 2222
+base_dir: /opt/portfolio
+web_dir: /var/www
+arch: arm64
+
+# Anubis
+anubis_version: "1.25.0"
+anubis_port: 8923
+anubis_metrics_port: 9091
+anubis_difficulty: 4

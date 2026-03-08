@@ -1,0 +1,30 @@
+---
+- name: Create landing directory
+  file:
+    path: "{{ web_dir }}/landing"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Copy landing page
+  copy:
+    src: "{{ playbook_dir }}/../../web/landing/"
+    dest: "{{ web_dir }}/landing/"
+    owner: www-data
+    group: www-data
+
+- name: Create assets directory
+  file:
+    path: "{{ web_dir }}/assets"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Copy assets
+  copy:
+    src: "{{ playbook_dir }}/../../assets/"
+    dest: "{{ web_dir }}/assets/"
+    owner: www-data
+    group: www-data

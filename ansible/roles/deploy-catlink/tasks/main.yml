@@ -1,0 +1,21 @@
+---
+- name: Create CatLink directory
+  file:
+    path: /opt/catlink
+    state: directory
+    mode: '0755'
+
+- name: Copy CatLink docker-compose
+  copy:
+    src: "{{ playbook_dir }}/../../docker/catlink/docker-compose.yml"
+    dest: /opt/catlink/docker-compose.yml
+
+- name: Pull CatLink images
+  command: docker compose pull
+  args:
+    chdir: /opt/catlink
+
+- name: Start CatLink containers
+  command: docker compose up -d --force-recreate
+  args:
+    chdir: /opt/catlink

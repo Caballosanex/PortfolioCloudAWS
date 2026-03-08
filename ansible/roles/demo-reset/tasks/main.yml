@@ -1,0 +1,19 @@
+---
+- name: Create scripts directory
+  file:
+    path: "{{ base_dir }}/scripts"
+    state: directory
+    mode: '0755'
+
+- name: Copy demo reset script
+  copy:
+    src: "{{ playbook_dir }}/../../scripts/reset-demos.sh"
+    dest: "{{ base_dir }}/scripts/reset-demos.sh"
+    mode: '0755'
+
+- name: Set up demo reset cron (every 6 hours)
+  cron:
+    name: "Reset demo data"
+    minute: "0"
+    hour: "*/6"
+    job: "{{ base_dir }}/scripts/reset-demos.sh >> /var/log/demo-reset.log 2>&1"
