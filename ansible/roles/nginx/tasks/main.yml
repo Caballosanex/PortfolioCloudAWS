@@ -4,6 +4,12 @@
     name: nginx
     state: present
 
+- name: Remove duplicate SSL params (Certbot provides these via options-ssl-nginx.conf)
+  file:
+    path: /etc/nginx/conf.d/ssl-params.conf
+    state: absent
+  notify: reload nginx
+
 - name: Copy Nginx site config
   copy:
     src: "{{ playbook_dir }}/../../nginx/conf.d/asanchezbl.dev.conf"
