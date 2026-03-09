@@ -64,9 +64,9 @@
     dest: /etc/systemd/system/cv-service.service
   notify: restart cv-service
 
-- name: Enable CV service
+- name: Enable and restart CV service
   systemd:
     name: cv-service
     enabled: true
-    state: started
+    state: restarted
     daemon_reload: true

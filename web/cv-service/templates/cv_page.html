@@ -3,7 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CV - Alex Sanchez Blabia</title>
+  <title>CV — Alex Sanchez Blabia</title>
+  <link rel="canonical" href="https://asanchezbl.dev/cv/">
+  <meta name="description" content="CV of Alex Sanchez Blabia — Systems Administrator and Cloud Engineer based in Barcelona. Available in Spanish, English, and Catalan.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://asanchezbl.dev/cv/">
+  <meta property="og:title" content="CV — Alex Sanchez Blabia">
+  <meta property="og:description" content="Systems Administrator and Cloud Engineer based in Barcelona. AWS, Terraform, Docker, Ansible, Linux.">
+  <meta property="og:image" content="https://asanchezbl.dev/assets/photos/FotoCarnetASBnew.webp">
+  <meta name="twitter:card" content="summary_large_image">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,6 +35,13 @@
       flex-direction: column;
       align-items: center;
       padding: 5rem 1rem 2rem;
+    }
+
+    main {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .top-nav {
@@ -103,7 +118,7 @@
       gap: 0.5rem;
       justify-content: center;
       margin-bottom: 1rem;
-      max-width: 700px;
+      max-width: 1100px;
       width: 100%;
     }
 
@@ -127,7 +142,7 @@
     .preview-wrapper {
       position: relative;
       width: 100%;
-      max-width: 800px;
+      max-width: 1100px;
       margin-bottom: 1.2rem;
     }
 
@@ -174,7 +189,7 @@
       gap: 0.75rem;
       margin-bottom: 1.5rem;
       width: 100%;
-      max-width: 800px;
+      max-width: 1100px;
     }
 
     .download-btn {
@@ -253,6 +268,7 @@
 
   {% set lang_names = {'es': 'Spanish', 'en': 'English', 'ca': 'Catalan'} %}
 
+  <main>
   <div class="header">
     <h1>Curriculum Vitae</h1>
     <p class="subtitle">Alex Sanchez Blabia</p>
@@ -266,13 +282,13 @@
 
   <div class="lang-tabs">
     {% for code, info in languages.items() %}
-    <button class="lang-tab{% if loop.first %} active{% endif %}" data-lang="{{ code }}" onclick="switchLang('{{ code }}', this)">{{ lang_names.get(code, info.label) }}</button>
+    <button class="lang-tab{% if loop.first %} active{% endif %}" data-lang="{{ code }}">{{ lang_names.get(code, info.label) }}</button>
     {% endfor %}
   </div>
 
   <div class="preview-wrapper">
     <div class="preview-container">
-      <iframe id="cv-preview" src="/cv/preview/es"></iframe>
+      <iframe id="cv-preview"></iframe>
     </div>
     <div class="iframe-loader" id="iframe-loader">
       <div class="spinner"></div>
@@ -295,21 +311,9 @@
     </div>
     <a href="/portfolio" class="back-link">&larr; Back to portfolio</a>
   </div>
+  </main>
 
-  <script>
-    function switchLang(lang, el) {
-      var iframe = document.getElementById('cv-preview');
-      var loader = document.getElementById('iframe-loader');
-      loader.style.display = 'flex';
-      iframe.src = '/cv/preview/' + lang;
-      document.getElementById('download-link').href = '/cv/download/' + lang;
-      document.querySelectorAll('.lang-tab').forEach(function(t) { t.classList.remove('active'); });
-      el.classList.add('active');
-    }
-
-    document.getElementById('cv-preview').addEventListener('load', function() {
-      document.getElementById('iframe-loader').style.display = 'none';
-    });
-  </script>
+  <script src="/cv/static/cv.js"></script>
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4ece574f5bb2476097646165fe72beef"}'></script>
 </body>
 </html>

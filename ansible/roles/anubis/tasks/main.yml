@@ -55,11 +55,18 @@
     dest: /etc/systemd/system/anubis.service
   notify: restart anubis
 
-- name: Enable Anubis
+- name: Copy Anubis policy file
+  copy:
+    src: policy.yaml
+    dest: /etc/anubis-policy.yaml
+    mode: '0644'
+  notify: restart anubis
+
+- name: Enable and restart Anubis
   systemd:
     name: anubis
     enabled: true
-    state: started
+    state: restarted
     daemon_reload: true
 
 - name: Clean up Anubis download
