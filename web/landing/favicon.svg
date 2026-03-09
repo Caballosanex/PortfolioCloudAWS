@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="7" fill="#12121a"/>
+  <rect width="32" height="32" rx="7" fill="none" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="16" y="22" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="700" fill="#6366f1" text-anchor="middle">A</text>
+</svg>
