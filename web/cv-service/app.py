@@ -4,6 +4,7 @@ import sqlite3
 from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from jinja2 import Environment, FileSystemLoader
 import yaml
 
@@ -15,6 +16,24 @@ TEMPLATES_DIR = BASE_DIR / "templates"
 DB_PATH = BASE_DIR / "visits.db"
 
 app = FastAPI(title="CV Service")
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+
+
+@app.on_event("startup")
+async def warmup():
+    """Pre-generate all PDFs at startup so first requests are instant."""
+    import asyncio
+    import concurrent.futures
+
+    def _gen(lang):
+        try:
+            generate_pdf(lang, force=False)
+        except Exception as e:
+            print(f"[warmup] Failed to pre-generate {lang}: {e}")
+
+    loop = asyncio.get_event_loop()
+    with concurrent.futures.ThreadPoolExecutor() as pool:
+        await asyncio.gather(*[loop.run_in_executor(pool, _gen, lang) for lang in LANGUAGES])
 
 jinja_env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)))
 
@@ -57,19 +76,22 @@ def load_cv_data(lang: str) -> dict:
         return yaml.safe_load(f)
 
 
-def generate_pdf(lang: str) -> Path:
-    """Generate PDF from YAML data + HTML template using WeasyPrint."""
+def generate_pdf(lang: str, force: bool = False) -> Path:
+    """Generate PDF from YAML data + HTML template using WeasyPrint.
+    If the PDF already exists and force=False, return the cached file."""
     from weasyprint import HTML
 
     data = load_cv_data(lang)
-    template = jinja_env.get_template("cv.html")
-    html_content = template.render(cv=data, lang=lang)
-
     suffix = LANGUAGES[lang]["file_suffix"]
     name = data["personal"]["name"].replace(" ", "_")
     filename = f"CV_{name}_{suffix}.pdf"
     output_path = GENERATED_DIR / filename
 
+    if output_path.exists() and not force:
+        return output_path
+
+    template = jinja_env.get_template("cv.html")
+    html_content = template.render(cv=data, lang=lang)
     HTML(string=html_content, base_url=str(BASE_DIR)).write_pdf(str(output_path))
     return output_path
 
@@ -92,7 +114,10 @@ async def preview_cv(lang: str):
     return FileResponse(
         path=str(pdf_path),
         media_type="application/pdf",
-        headers={"Content-Disposition": "inline"},
+        headers={
+            "Content-Disposition": "inline",
+            "Cache-Control": "public, max-age=3600",
+        },
     )
 
 
@@ -107,6 +132,7 @@ async def download_cv(lang: str):
         path=str(pdf_path),
         filename=pdf_path.name,
         media_type="application/pdf",
+        headers={"Cache-Control": "public, max-age=3600"},
     )
 
 

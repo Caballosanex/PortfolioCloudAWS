@@ -1,0 +1,28 @@
+# Anubis policy for asanchezbl.dev
+# Imports the built-in AI bot policies, then adds rules for generic scrapers.
+
+# --- Built-in imports (keep AI bot blocking) ---
+- import: (data)/botPolicies.yaml
+
+# --- Generic scraping tools ---
+- name: scrapy
+  user_agent_regex: "(?i)scrapy"
+  action: CHALLENGE
+  challenge:
+    algorithm: fast
+    difficulty: 6
+
+- name: python-requests
+  user_agent_regex: "(?i)python-requests"
+  action: CHALLENGE
+  challenge:
+    algorithm: fast
+    difficulty: 6
+
+- name: curl
+  user_agent_regex: "(?i)^curl/"
+  action: CHALLENGE
+  challenge:
+    algorithm: fast
+    difficulty: 6
+
