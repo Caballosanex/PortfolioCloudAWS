@@ -9,10 +9,10 @@ personal:
   website: "asanchezbl.dev"
 
 summary: >
-  Administrador Junior de Sistemes i Xarxes amb mes de 2 anys d'experiencia practica en
-  suport IT, manteniment de sistemes i administracio de xarxes. Competent en Linux,
+  Administrador Junior de Sistemes i Xarxes amb més de 2 anys d'experiència pràctica en
+  suport IT, manteniment de sistemes i administració de xarxes. Competent en Linux,
   infraestructura cloud (AWS), Docker i ciberseguretat. Contribuidor actiu de projectes
-  open source amb experiencia en desenvolupament full-stack a nivell de hackathon.
+  open source amb experiència en desenvolupament full-stack a nivell de hackathon.
   Actualment cursant el CFGS ASIX a iTIC Barcelona.
 
 experience:
@@ -21,31 +21,31 @@ experience:
     date: "2025"
     location: "Remot"
     tasks:
-      - "Disseny complet de xarxa 10GbE i infraestructura NAS per a un estudi de produccio de video professional amb 3-4 TB/mes de material 4K"
-      - "Avaluacio i comparativa de solucions NAS en rack (Synology RS422+ vs RS2423RP+) i equipament de xarxa (Ubiquiti UniFi)"
-      - "Analisi d'amplada de banda demostrant la suficiencia d'Ethernet 10GbE davant fibra optica, estalviant costos significatius al client"
-      - "Entrega de proposta integral incloent configuracio RAID6, proteccio UPS, planificacio IP estatica i pressupost (4.700 - 7.300 EUR)"
+      - "Disseny complet de xarxa 10GbE i infraestructura NAS per a un estudi de producció de vídeo professional amb 3-4 TB/mes de material 4K"
+      - "Avaluació i comparativa de solucions NAS en rack (Synology RS422+ vs RS2423RP+) i equipament de xarxa (Ubiquiti UniFi)"
+      - "Anàlisi d'amplada de banda demostrant la suficiència d'Ethernet 10GbE davant fibra òptica, estalviant costos significatius al client"
+      - "Entrega de proposta integral incloent configuració RAID6, protecció UPS, planificació IP estàtica i pressupost (4.700 - 7.300 EUR)"
 
-  - title: "Tecnic Help Desk N1"
+  - title: "Tècnic Help Desk N1"
     company: "Fractalia Systems"
     date: "Nov 2022 - Ago 2024"
     location: "L'Hospitalet de Llobregat"
     tasks:
-      - "Gestio de centraleta telefonica amb 10 linies, atenent ~200 trucades setmanals de proveidors de Telefonica i empleats de CaixaBank"
-      - "Resolucio d'incidencies de sistemes i xarxes mobils com a tecnic N1"
-      - "Creacio de mes del 50% dels informes de servei del departament"
+      - "Gestió de centraleta telefònica amb 10 línies, atenent ~200 trucades setmanals de proveïdors de Telefónica i empleats de CaixaBank"
+      - "Resolució d'incidències de sistemes i xarxes mòbils com a tècnic N1"
+      - "Creació de més del 50% dels informes de servei del departament"
 
-  - title: "Practiques IT"
+  - title: "Pràctiques IT"
     company: "Red Computer Barcelona"
     date: "Mar 2022 - Jun 2022"
     location: "Barcelona"
     tasks:
       - "Manteniment de sistemes per a PIMES amb pressupostos entre 2.000 - 4.000 EUR"
-      - "Administracio d'usuaris i recursos compartits per a particulars i PIMES"
+      - "Administració d'usuaris i recursos compartits per a particulars i PIMES"
       - "Suport help desk local i remot, muntatge de ~5 equips diaris"
 
 education:
-  - degree: "CFGS en Administracio de Sistemes Informatics en Xarxa (ASIX)"
+  - degree: "CFGS en Administració de Sistemes Informàtics en Xarxa (ASIX)"
     institution: "Institut TIC de Barcelona"
     date: "Set 2024 - Present"
     location: "Barcelona"
@@ -54,20 +54,20 @@ education:
     institution: "42 Barcelona"
     date: "Jun 2022 - Ago 2024"
     location: "Barcelona"
-    details: "Programacio avancada en C/C++, programacio de sistemes, serveis de xarxa, gestio de bases de dades"
+    details: "Programació avançada en C/C++, programació de sistemes, serveis de xarxa, gestió de bases de dades"
 
-  - degree: "CFGM en Sistemes Microinformatics i Xarxes (SMX)"
-    institution: "Institut Mare de Deu de la Merce"
+  - degree: "CFGM en Sistemes Microinformàtics i Xarxes (SMX)"
+    institution: "Institut Mare de Déu de la Mercè"
     date: "Ago 2020 - Jun 2022"
     location: "Barcelona"
-    details: "Projecte final: Servei de virtualitzacio centralitzat amb IsardVDI"
+    details: "Projecte final: Servei de virtualització centralitzat amb IsardVDI"
 
 skills:
   systems: "Linux (Ubuntu, Debian), Windows Server, Proxmox, VMware"
   networking: "TCP/IP, DNS, DHCP, VPN, VLAN, Cisco IOS, 10GbE, LAN/WAN"
   cloud: "AWS (EC2, VPC, S3, Route53, IAM), Terraform, Ansible"
   containers: "Docker, Docker Compose"
-  security: "fail2ban, UFW/iptables, Certbot/SSL, Proves de Penetracio"
+  security: "fail2ban, UFW/iptables, Certbot/SSL, Proves de Penetració"
   development: "Python, C, C++, Bash, FastAPI, React, Flutter, Git"
   monitoring: "Prometheus, Grafana, Node Exporter"
   other: "Nginx, PostgreSQL, SQLite, Office 365, Self-hosting"
@@ -86,29 +86,29 @@ certifications:
     date: "Ago 2023"
 
   - name: "Bootcamp de Ciberseguretat"
-    issuer: "42 Barcelona / Fundacio Telefonica"
+    issuer: "42 Barcelona / Fundació Telefònica"
     date: "Mai 2023"
 
   - name: "B2 First (FCE)"
     issuer: "University of Cambridge"
     date: "Jul 2020"
 
-  - name: "Suficiencia de Catala (C1)"
+  - name: "Suficiència de Català (C1)"
     issuer: "Generalitat de Catalunya"
     date: "Feb 2025"
 
 languages:
-  - lang: "Catala"
+  - lang: "Català"
     level: "Natiu"
-  - lang: "Castella"
+  - lang: "Castellà"
     level: "Natiu"
-  - lang: "Angles"
+  - lang: "Anglès"
     level: "Professional (B2 Cambridge)"
-  - lang: "Frances"
-    level: "Basic"
+  - lang: "Francès"
+    level: "Bàsic"
 
 achievements:
-  - "AWS GameDay 2025 - Subcampio nacional (Equip AMEP, iTIC Barcelona)"
-  - "Talent Arena Hackathon 2025 - Desenvolupament del sistema d'emergencies SERP"
+  - "AWS GameDay 2025 - Subcampió nacional (Equip AMEP, iTIC Barcelona)"
+  - "Talent Arena Hackathon 2025 - Desenvolupament del sistema d'emergències SERP"
   - "Talent Arena Hackathon 2026 - Desenvolupament de CatLink, agent IA per a carregadors de VE"
-  - "Contribuidor open source actiu: WeatherMaster (Flutter), mfkey/Flipper Zero (optimitzacio de rendiment 70x en C)"
+  - "Contribuidor open source actiu: WeatherMaster (Flutter), mfkey/Flipper Zero (optimització de rendiment 70x en C)"
