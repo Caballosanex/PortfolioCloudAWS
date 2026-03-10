@@ -147,6 +147,26 @@
       margin-bottom: 1.2rem;
     }
 
+    .preview-mobile {
+      display: none;
+      overflow-y: auto;
+      max-height: 85vh;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.75rem;
+    }
+
+    .preview-mobile canvas {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+    }
+
+    .preview-mobile canvas + canvas {
+      margin-top: 8px;
+    }
+
     .preview-container {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -294,17 +314,20 @@
     <div class="iframe-loader" id="iframe-loader">
       <div class="spinner"></div>
     </div>
+    <div class="preview-mobile" id="preview-mobile">
+      <div id="pdf-canvas-container"></div>
+    </div>
   </div>
 
   <div class="actions">
-    <a href="/cv/download/es" class="download-btn" id="download-link">
+    <a href="/cv/download/es" class="download-btn" id="download-link" download>
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
       Download PDF
     </a>
     <div class="download-all">
       <span class="download-all-label">All versions:</span>
       {% for code, info in languages.items() %}
-      <a href="/cv/download/{{ code }}" class="download-link-sm">
+      <a href="/cv/download/{{ code }}" class="download-link-sm" download>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
         {{ lang_names.get(code, info.label) }}
       </a>
@@ -314,6 +337,7 @@
   </div>
   </main>
 
+  <script src="/cv/static/pdf.min.js"></script>
   <script src="/cv/static/cv.js"></script>
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4ece574f5bb2476097646165fe72beef"}'></script>
 </body>
