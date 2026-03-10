@@ -11,7 +11,7 @@ personal:
 summary: >
   Administrador Junior de Sistemes i Xarxes amb més de 2 anys d'experiència pràctica en
   suport IT, manteniment de sistemes i administració de xarxes. Competent en Linux,
-  infraestructura cloud (AWS), Docker i ciberseguretat. Contribuidor actiu de projectes
+  infraestructura cloud (AWS), Docker i ciberseguretat. Contribuïdor actiu de projectes
   open source amb experiència en desenvolupament full-stack a nivell de hackathon.
   Actualment cursant el CFGS ASIX a iTIC Barcelona.
 
@@ -31,7 +31,7 @@ experience:
     date: "Nov 2022 - Ago 2024"
     location: "L'Hospitalet de Llobregat"
     tasks:
-      - "Gestió de centraleta telefònica amb 10 línies, atenent ~200 trucades setmanals de proveïdors de Telefónica i empleats de CaixaBank"
+      - "Gestió de centraleta telefònica amb 10 línies, atenent ~200 trucades setmanals de proveïdors de Telefònica i empleats de CaixaBank"
       - "Resolució d'incidències de sistemes i xarxes mòbils com a tècnic N1"
       - "Creació de més del 50% dels informes de servei del departament"
 
@@ -111,4 +111,4 @@ achievements:
   - "AWS GameDay 2025 - Subcampió nacional (Equip AMEP, iTIC Barcelona)"
   - "Talent Arena Hackathon 2025 - Desenvolupament del sistema d'emergències SERP"
   - "Talent Arena Hackathon 2026 - Desenvolupament de CatLink, agent IA per a carregadors de VE"
-  - "Contribuidor open source actiu: WeatherMaster (Flutter), mfkey/Flipper Zero (optimització de rendiment 70x en C)"
+  - "Contribuïdor open source actiu: WeatherMaster (Flutter), mfkey/Flipper Zero (optimització de rendiment 70x en C)"
