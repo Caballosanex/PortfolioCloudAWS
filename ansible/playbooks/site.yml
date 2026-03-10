@@ -15,10 +15,17 @@
   hosts: portfolio
   become: true
   roles:
-    - deploy-landing
-    - deploy-cv
-    - deploy-portfolio
-    - deploy-serp
-    - deploy-catlink
-    - demo-reset
-    - anubis
+    - role: deploy-landing
+      tags: deploy-landing
+    - role: deploy-cv
+      tags: deploy-cv
+    - role: deploy-portfolio
+      tags: deploy-portfolio
+    - role: deploy-serp
+      tags: deploy-serp
+    - role: deploy-catlink
+      tags: deploy-catlink
+    - role: demo-reset
+      tags: demo-reset
+    - role: anubis
+      tags: anubis
