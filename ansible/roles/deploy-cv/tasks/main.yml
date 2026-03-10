@@ -11,7 +11,8 @@
   copy:
     src: "{{ playbook_dir }}/../../web/cv-service/"
     dest: "{{ base_dir }}/cv-service/"
-  become: true
+    owner: www-data
+    group: www-data
   notify: restart cv-service
 
 - name: Install WeasyPrint system dependencies
