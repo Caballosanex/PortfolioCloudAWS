@@ -277,7 +277,7 @@
 
   <!-- Experience -->
   {% if lang == 'es' %}{% set exp_title = "Experiencia Profesional" %}
-  {% elif lang == 'ca' %}{% set exp_title = "Experiencia Professional" %}
+  {% elif lang == 'ca' %}{% set exp_title = "Experiència Professional" %}
   {% else %}{% set exp_title = "Professional Experience" %}{% endif %}
   <div class="section">
     <div class="section-title">{{ exp_title }}</div>
@@ -298,8 +298,8 @@
   </div>
 
   <!-- Education -->
-  {% if lang == 'es' %}{% set edu_title = "Formacion Academica" %}
-  {% elif lang == 'ca' %}{% set edu_title = "Formacio Academica" %}
+  {% if lang == 'es' %}{% set edu_title = "Formación Académica" %}
+  {% elif lang == 'ca' %}{% set edu_title = "Formació Acadèmica" %}
   {% else %}{% set edu_title = "Education" %}{% endif %}
   <div class="section">
     <div class="section-title">{{ edu_title }}</div>
@@ -318,8 +318,8 @@
   </div>
 
   <!-- Skills -->
-  {% if lang == 'es' %}{% set skills_title = "Habilidades Tecnicas" %}
-  {% elif lang == 'ca' %}{% set skills_title = "Habilitats Tecniques" %}
+  {% if lang == 'es' %}{% set skills_title = "Habilidades Técnicas" %}
+  {% elif lang == 'ca' %}{% set skills_title = "Habilitats Tècniques" %}
   {% else %}{% set skills_title = "Technical Skills" %}{% endif %}
   <div class="section">
     <div class="section-title">{{ skills_title }}</div>
@@ -330,7 +330,7 @@
       'containers': {'en': 'Containers', 'es': 'Contenedores', 'ca': 'Contenidors'},
       'security': {'en': 'Security', 'es': 'Seguridad', 'ca': 'Seguretat'},
       'development': {'en': 'Development', 'es': 'Desarrollo', 'ca': 'Desenvolupament'},
-      'monitoring': {'en': 'Monitoring', 'es': 'Monitorizacion', 'ca': 'Monitoritzacio'},
+      'monitoring': {'en': 'Monitoring', 'es': 'Monitorización', 'ca': 'Monitorització'},
       'other': {'en': 'Other', 'es': 'Otros', 'ca': 'Altres'}
     } %}
     {% for key, value in cv.skills.items() %}
