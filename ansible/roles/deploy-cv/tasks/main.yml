@@ -37,6 +37,27 @@
     requirements: "{{ base_dir }}/cv-service/requirements.txt"
     virtualenv: "{{ base_dir }}/cv-service/venv"
 
+- name: Check if PDF.js already downloaded
+  stat:
+    path: "{{ base_dir }}/cv-service/static/pdf.min.js"
+  register: pdfjs_stat
+
+- name: Download PDF.js library (mobile PDF canvas rendering)
+  get_url:
+    url: https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js
+    dest: "{{ base_dir }}/cv-service/static/pdf.min.js"
+    mode: '0644'
+    timeout: 60
+  when: not pdfjs_stat.stat.exists
+
+- name: Download PDF.js worker (mobile PDF canvas rendering)
+  get_url:
+    url: https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js
+    dest: "{{ base_dir }}/cv-service/static/pdf.worker.min.js"
+    mode: '0644'
+    timeout: 60
+  when: not pdfjs_stat.stat.exists
+
 - name: Set CV service directory ownership
   file:
     path: "{{ base_dir }}/cv-service"
