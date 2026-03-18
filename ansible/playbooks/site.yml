@@ -5,11 +5,16 @@
   hosts: portfolio
   become: true
   roles:
-    - base
-    - security
-    - docker
-    - nginx
-    - certbot
+    - role: base
+      tags: base
+    - role: security
+      tags: security
+    - role: docker
+      tags: docker
+    - role: nginx
+      tags: nginx
+    - role: certbot
+      tags: certbot
 
 - name: Deploy applications
   hosts: portfolio
