@@ -10,10 +10,36 @@
     state: absent
   notify: reload nginx
 
-- name: Copy Nginx site config
+- name: Check if SSL certificate exists
+  stat:
+    path: /etc/letsencrypt/live/{{ domain }}/fullchain.pem
+  register: ssl_cert
+
+- name: Copy Nginx site config (full SSL)
   copy:
     src: "{{ playbook_dir }}/../../nginx/conf.d/asanchezbl.dev.conf"
     dest: /etc/nginx/sites-available/{{ domain }}
+  when: ssl_cert.stat.exists
+  notify: reload nginx
+
+- name: Deploy HTTP-only bootstrap config (pre-SSL, for initial certbot)
+  copy:
+    dest: /etc/nginx/sites-available/{{ domain }}
+    content: |
+      # Bootstrap config — HTTP only, replaced after certbot obtains SSL cert
+      server {
+          listen 80;
+          listen [::]:80;
+          server_name {{ domain }} www.{{ domain }};
+
+          root /var/www/landing;
+          index index.html;
+
+          location / {
+              try_files $uri $uri/ =404;
+          }
+      }
+  when: not ssl_cert.stat.exists
   notify: reload nginx
 
 - name: Enable Nginx site

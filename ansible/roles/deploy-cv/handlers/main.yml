@@ -1,5 +1,10 @@
 ---
 - name: restart cv-service
+  shell: rm -f {{ base_dir }}/cv-service/generated/*.pdf
+  listen: restart cv-service
+
+- name: restart cv-service systemd
   systemd:
     name: cv-service
     state: restarted
+  listen: restart cv-service

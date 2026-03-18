@@ -6,9 +6,24 @@
       - python3-certbot-nginx
     state: present
 
-- name: Obtain SSL certificate
+- name: Obtain SSL certificate (cert only, Nginx config is managed by us)
   command: >
-    certbot --nginx -d {{ domain }} -d www.{{ domain }}
+    certbot certonly --webroot -w /var/www/landing
+    -d {{ domain }} -d www.{{ domain }}
     --non-interactive --agree-tos
     --email {{ certbot_email }}
-    --redirect
+    --keep
+  register: certbot_result
+  changed_when: "'no action taken' not in certbot_result.stdout"
+
+- name: Deploy full Nginx config with SSL (after cert is available)
+  copy:
+    src: "{{ playbook_dir }}/../../nginx/conf.d/asanchezbl.dev.conf"
+    dest: /etc/nginx/sites-available/{{ domain }}
+  notify: reload nginx
+
+- name: Set up Certbot auto-renewal timer
+  systemd:
+    name: certbot.timer
+    state: started
+    enabled: yes

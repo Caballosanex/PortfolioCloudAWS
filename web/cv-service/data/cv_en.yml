@@ -73,6 +73,10 @@ skills:
   other: "Nginx, PostgreSQL, SQLite, Office 365, Self-hosting"
 
 certifications:
+  - name: "AWS Academy Cloud Foundations"
+    issuer: "Amazon Web Services"
+    date: "2025"
+
   - name: "CCNA: Introduction to Networks"
     issuer: "Cisco"
     date: "Feb 2025"
