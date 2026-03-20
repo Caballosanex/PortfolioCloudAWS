@@ -259,16 +259,79 @@
       animation: fadeUp 0.5s 0.52s ease both;
     }
 
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: currentColor;
+      margin: 5px 0;
+      border-radius: 2px;
+    }
+
     @media (max-width: 480px) {
       h1 { font-size: 1.6rem; }
       .bio { font-size: 0.88rem; }
       .avatar { width: 90px; height: 90px; }
+      .nav-toggle {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+        align-items: center;
+      }
+      .top-nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: rgba(10, 10, 15, 0.97);
+        border-bottom: 1px solid var(--border);
+        padding: 0.5rem 0;
+        z-index: 99;
+      }
+      .top-nav-links.open {
+        display: flex;
+      }
+      .top-nav-links a {
+        padding: 0.9rem 1.5rem;
+        font-size: 0.95rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        width: 100%;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+      }
+      .top-nav-cta {
+        margin: 0.5rem 1.5rem !important;
+        text-align: center;
+        border-radius: 6px !important;
+        width: auto;
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
   <nav class="top-nav">
     <a href="/" class="top-nav-logo">ASB</a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <div class="top-nav-links">
       <a href="/portfolio">Portfolio</a>
       <a href="/cv" class="top-nav-cta">CV</a>
@@ -315,6 +378,23 @@
     <p class="footer">Deployed on AWS with Terraform & Ansible</p>
   </div>
   </main>
+  <script>
+(function(){
+  var btn = document.querySelector('.nav-toggle');
+  var menu = document.querySelector('.top-nav-links');
+  if (!btn || !menu) return;
+  btn.addEventListener('click', function() {
+    var open = menu.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+  });
+  menu.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A') {
+      menu.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+})();
+  </script>
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4ece574f5bb2476097646165fe72beef"}'></script>
 </body>
 </html>
