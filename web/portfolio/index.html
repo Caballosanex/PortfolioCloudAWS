@@ -25,6 +25,11 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="/" class="nav-logo">ASB</a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
       <div class="nav-links">
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
@@ -307,6 +312,7 @@ if (program_state->key_buffer_count >= program_state->key_buffer_size) {
     </div>
   </footer>
 
+  <script>(function(){var btn=document.querySelector('.nav-toggle');var menu=document.querySelector('.nav-links');if(!btn||!menu)return;btn.addEventListener('click',function(){var open=menu.classList.toggle('open');btn.setAttribute('aria-expanded',String(open))});menu.addEventListener('click',function(e){if(e.target.tagName==='A'){menu.classList.remove('open');btn.setAttribute('aria-expanded','false')}})})();</script>
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4ece574f5bb2476097646165fe72beef"}'></script>
 </body>
 </html>
