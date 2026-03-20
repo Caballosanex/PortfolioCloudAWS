@@ -10,6 +10,16 @@
     state: absent
   notify: reload nginx
 
+- name: Deploy global nginx.conf
+  copy:
+    src: "{{ playbook_dir }}/../../nginx/nginx.conf"
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+  notify: reload nginx
+
 - name: Check if SSL certificate exists
   stat:
     path: /etc/letsencrypt/live/{{ domain }}/fullchain.pem
