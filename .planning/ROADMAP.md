@@ -33,8 +33,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Nginx global config (gzip, TLS session cache, HTTP/2, worker tuning) + Ansible role with nginx -t validation
-- [ ] 01-02-PLAN.md — Upstream keepalive blocks for all backends + 2GB swap file Ansible role
+- [x] 01-01-PLAN.md — Nginx global config (gzip, TLS session cache, HTTP/2, worker tuning) + Ansible role with nginx -t validation
+- [x] 01-02-PLAN.md — Upstream keepalive blocks for all backends + 2GB swap file Ansible role
 
 ### Phase 2: Frontend Polish and Mobile UX
 **Goal**: A recruiter on any phone screen size can navigate the portfolio without layout breakage
