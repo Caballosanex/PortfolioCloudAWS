@@ -13,7 +13,7 @@ This is a targeted polish pass on a working production portfolio at asanchezbl.d
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Nginx and Infrastructure Hardening** - Enable gzip, TLS session cache, HTTP/2, upstream keepalive, worker tuning, and swap file
-- [ ] **Phase 2: Frontend Polish and Mobile UX** - Fix mobile navigation breakpoint for small screens
+- [x] **Phase 2: Frontend Polish and Mobile UX** - Fix mobile navigation breakpoint for small screens (completed 2026-03-20)
 - [ ] **Phase 3: CV Service Quality** - Enable SQLite WAL mode for concurrent request correctness
 - [ ] **Phase 4: Docker and Ansible Reliability** - Add memory limits, image cleanup cron, and idempotent CV deploys
 - [ ] **Phase 5: Polish and Differentiators** - Add scroll-based nav highlighting and JSON-LD structured data
@@ -43,10 +43,10 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. On a 320px-wide viewport (smallest common phone), the portfolio and landing page navigation is fully usable -- either a hamburger menu or a collapsing layout that does not overflow or clip
   2. On a 375px-wide viewport (iPhone SE/Mini), all nav links are tappable without horizontal scroll
-**Plans**: TBD
+**Plans:** 1/1 plans complete
 
 Plans:
-- [ ] 02-01: TBD
+- [x] 02-01-PLAN.md — Hamburger menus for portfolio and landing page navbars (CSS + JS toggle + visual checkpoint)
 
 ### Phase 3: CV Service Quality
 **Goal**: The CV visit counter never loses counts or locks up under concurrent requests
@@ -55,7 +55,7 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. SQLite database file has a `-wal` companion file present after the first write, confirming WAL mode is active
   2. Two simultaneous `curl` requests to `/cv/preview/en` both succeed (HTTP 200) without either returning a database-locked error
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
 - [ ] 03-01: TBD
@@ -68,7 +68,7 @@ Plans:
   1. `docker inspect` on SERP and CatLink containers shows memory limits configured (not `0` / unlimited)
   2. `crontab -l` or systemd timer list shows a scheduled Docker image prune job
   3. Running `ansible-playbook playbooks/site.yml --tags cv` twice in a row without changing any CV files produces no service restart on the second run (handler not triggered)
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
 - [ ] 04-01: TBD
@@ -82,7 +82,7 @@ Plans:
   2. Viewing page source of the landing page shows a `<script type="application/ld+json">` block with a valid Person schema containing name, url, and sameAs fields
   3. Viewing page source of the portfolio page shows a `<script type="application/ld+json">` block with valid Person schema
   4. Google Rich Results Test (or manual JSON-LD validation) returns no errors on the schema markup
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
 - [ ] 05-01: TBD
@@ -95,7 +95,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Nginx and Infrastructure Hardening | 0/2 | Planned | - |
-| 2. Frontend Polish and Mobile UX | 0/? | Not started | - |
+| 2. Frontend Polish and Mobile UX | 1/1 | Complete   | 2026-03-20 |
 | 3. CV Service Quality | 0/? | Not started | - |
 | 4. Docker and Ansible Reliability | 0/? | Not started | - |
 | 5. Polish and Differentiators | 0/? | Not started | - |
