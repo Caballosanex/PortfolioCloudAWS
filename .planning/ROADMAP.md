@@ -58,7 +58,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 03-01: TBD
+- [ ] 03-01-PLAN.md — Enable SQLite WAL mode + busy_timeout in CV service, deploy and verify
 
 ### Phase 4: Docker and Ansible Reliability
 **Goal**: Docker containers cannot OOM-kill each other, disk space does not silently fill up, and CV deploys only restart the service when something actually changed
