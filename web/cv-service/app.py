@@ -46,6 +46,8 @@ LANGUAGES = {
 
 def get_db():
     db = sqlite3.connect(str(DB_PATH))
+    db.execute("PRAGMA journal_mode=wal")
+    db.execute("PRAGMA busy_timeout=5000")
     db.execute(
         "CREATE TABLE IF NOT EXISTS visits (id INTEGER PRIMARY KEY, count INTEGER DEFAULT 0)"
     )
