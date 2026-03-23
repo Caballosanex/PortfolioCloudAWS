@@ -23,7 +23,7 @@ Requirements for this polish pass. Each maps to roadmap phases.
 
 ### CV Service
 
-- [ ] **CV-01**: SQLite visit counter uses WAL mode for concurrent request correctness
+- [x] **CV-01**: SQLite visit counter uses WAL mode for concurrent request correctness
 
 ### Docker & Ansible
 
@@ -95,7 +95,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-06 | Phase 1 | Complete |
 | FRONT-01 | Phase 2 | Complete |
 | FRONT-02 | Phase 5 | Pending |
-| CV-01 | Phase 3 | Pending |
+| CV-01 | Phase 3 | Complete |
 | DOCK-01 | Phase 4 | Pending |
 | DOCK-02 | Phase 4 | Pending |
 | DOCK-03 | Phase 4 | Pending |

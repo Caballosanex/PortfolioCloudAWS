@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Nginx and Infrastructure Hardening** - Enable gzip, TLS session cache, HTTP/2, upstream keepalive, worker tuning, and swap file
 - [x] **Phase 2: Frontend Polish and Mobile UX** - Fix mobile navigation breakpoint for small screens (completed 2026-03-20)
-- [ ] **Phase 3: CV Service Quality** - Enable SQLite WAL mode for concurrent request correctness
+- [x] **Phase 3: CV Service Quality** - Enable SQLite WAL mode for concurrent request correctness (completed 2026-03-23)
 - [ ] **Phase 4: Docker and Ansible Reliability** - Add memory limits, image cleanup cron, and idempotent CV deploys
 - [ ] **Phase 5: Polish and Differentiators** - Add scroll-based nav highlighting and JSON-LD structured data
 
@@ -55,10 +55,10 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. SQLite database file has a `-wal` companion file present after the first write, confirming WAL mode is active
   2. Two simultaneous `curl` requests to `/cv/preview/en` both succeed (HTTP 200) without either returning a database-locked error
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
-- [ ] 03-01-PLAN.md — Enable SQLite WAL mode + busy_timeout in CV service, deploy and verify
+- [x] 03-01-PLAN.md — Enable SQLite WAL mode + busy_timeout in CV service, deploy and verify
 
 ### Phase 4: Docker and Ansible Reliability
 **Goal**: Docker containers cannot OOM-kill each other, disk space does not silently fill up, and CV deploys only restart the service when something actually changed
@@ -96,6 +96,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Nginx and Infrastructure Hardening | 0/2 | Planned | - |
 | 2. Frontend Polish and Mobile UX | 1/1 | Complete   | 2026-03-20 |
-| 3. CV Service Quality | 0/? | Not started | - |
+| 3. CV Service Quality | 1/1 | Complete   | 2026-03-23 |
 | 4. Docker and Ansible Reliability | 0/? | Not started | - |
 | 5. Polish and Differentiators | 0/? | Not started | - |
