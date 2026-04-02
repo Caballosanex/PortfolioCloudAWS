@@ -87,9 +87,45 @@
     dest: /etc/systemd/system/cv-service.service
   notify: restart cv-service
 
-- name: Enable and restart CV service
+- name: Enable and start CV service
   systemd:
     name: cv-service
     enabled: true
-    state: restarted
+    state: started
     daemon_reload: true
+
+- name: Flush handlers before smoke test
+  meta: flush_handlers
+
+- name: Smoke test CV service - Spanish
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:8001/preview/es"
+    method: GET
+    status_code: 200
+    timeout: 30
+  register: cv_smoke_es
+  until: cv_smoke_es.status == 200
+  retries: 6
+  delay: 5
+
+- name: Smoke test CV service - English
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:8001/preview/en"
+    method: GET
+    status_code: 200
+    timeout: 30
+  register: cv_smoke_en
+  until: cv_smoke_en.status == 200
+  retries: 6
+  delay: 5
+
+- name: Smoke test CV service - Catalan
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:8001/preview/ca"
+    method: GET
+    status_code: 200
+    timeout: 30
+  register: cv_smoke_ca
+  until: cv_smoke_ca.status == 200
+  retries: 6
+  delay: 5
