@@ -7,6 +7,10 @@ services:
     image: docker.io/caballosanex/serp-backend:latest
     container_name: serp-backend
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5001"]
     ports:
       - "127.0.0.1:5001:5001"
@@ -19,6 +23,10 @@ services:
     image: docker.io/caballosanex/serp-frontend:latest
     container_name: serp-frontend
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 128M
     ports:
       - "127.0.0.1:3001:3000"
     environment:
