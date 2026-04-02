@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 1: Nginx and Infrastructure Hardening** - Enable gzip, TLS session cache, HTTP/2, upstream keepalive, worker tuning, and swap file
 - [x] **Phase 2: Frontend Polish and Mobile UX** - Fix mobile navigation breakpoint for small screens (completed 2026-03-20)
 - [x] **Phase 3: CV Service Quality** - Enable SQLite WAL mode for concurrent request correctness (completed 2026-03-23)
-- [ ] **Phase 4: Docker and Ansible Reliability** - Add memory limits, image cleanup cron, and idempotent CV deploys
+- [ ] **Phase 4: Docker and Ansible Reliability** - Add memory limits, idempotent CV deploys, and post-deploy smoke test
 - [ ] **Phase 5: Polish and Differentiators** - Add scroll-based nav highlighting and JSON-LD structured data
 
 ## Phase Details
@@ -61,17 +61,17 @@ Plans:
 - [x] 03-01-PLAN.md — Enable SQLite WAL mode + busy_timeout in CV service, deploy and verify
 
 ### Phase 4: Docker and Ansible Reliability
-**Goal**: Docker containers cannot OOM-kill each other, disk space does not silently fill up, and CV deploys only restart the service when something actually changed
+**Goal**: Docker containers cannot OOM-kill each other, and CV deploys only restart the service when something actually changed
 **Depends on**: Phase 3 (CV correctness before deploy reliability; Phase 1 swap file must exist before Docker image operations)
-**Requirements**: DOCK-01, DOCK-02, DOCK-03
+**Requirements**: DOCK-01, DOCK-02 (dropped — deferred to v2), DOCK-03, CV-02 (pulled from v2)
 **Success Criteria** (what must be TRUE):
   1. `docker inspect` on SERP and CatLink containers shows memory limits configured (not `0` / unlimited)
-  2. `crontab -l` or systemd timer list shows a scheduled Docker image prune job
-  3. Running `ansible-playbook playbooks/site.yml --tags cv` twice in a row without changing any CV files produces no service restart on the second run (handler not triggered)
+  2. Running `ansible-playbook playbooks/site.yml --tags cv` twice in a row without changing any CV files produces no service restart on the second run (handler not triggered)
+  3. Ansible CV deploy includes 3 passing `uri` smoke tests hitting all language PDF preview endpoints
 **Plans:** 1 plan
 
 Plans:
-- [ ] 04-01: TBD
+- [ ] 04-01-PLAN.md — Docker memory limits (SERP + CatLink) + CV deploy idempotency fix + post-deploy smoke test
 
 ### Phase 5: Polish and Differentiators
 **Goal**: The portfolio demonstrates frontend skill (scroll-aware navigation) and is discoverable via structured data in search engines
@@ -97,5 +97,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Nginx and Infrastructure Hardening | 0/2 | Planned | - |
 | 2. Frontend Polish and Mobile UX | 1/1 | Complete   | 2026-03-20 |
 | 3. CV Service Quality | 1/1 | Complete   | 2026-03-23 |
-| 4. Docker and Ansible Reliability | 0/? | Not started | - |
+| 4. Docker and Ansible Reliability | 0/1 | Planned | - |
 | 5. Polish and Differentiators | 0/? | Not started | - |
