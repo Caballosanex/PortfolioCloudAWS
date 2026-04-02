@@ -27,9 +27,9 @@ Requirements for this polish pass. Each maps to roadmap phases.
 
 ### Docker & Ansible
 
-- [ ] **DOCK-01**: SERP and CatLink Docker containers have memory limits configured (prevent OOM cascade)
+- [x] **DOCK-01**: SERP and CatLink Docker containers have memory limits configured (prevent OOM cascade)
 - [ ] **DOCK-02**: Docker image cleanup runs on a schedule to prevent EBS volume fill (dangling image prune)
-- [ ] **DOCK-03**: Ansible CV service deploy uses idempotent restart (only restarts when files change, not unconditionally)
+- [x] **DOCK-03**: Ansible CV service deploy uses idempotent restart (only restarts when files change, not unconditionally)
 
 ### SEO & Structured Data
 
@@ -96,9 +96,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FRONT-01 | Phase 2 | Complete |
 | FRONT-02 | Phase 5 | Pending |
 | CV-01 | Phase 3 | Complete |
-| DOCK-01 | Phase 4 | Pending |
+| DOCK-01 | Phase 4 | Complete |
 | DOCK-02 | Phase 4 | Pending |
-| DOCK-03 | Phase 4 | Pending |
+| DOCK-03 | Phase 4 | Complete |
 | SEO-01 | Phase 5 | Pending |
 
 **Coverage:**
