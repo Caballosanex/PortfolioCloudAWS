@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 1: Nginx and Infrastructure Hardening** - Enable gzip, TLS session cache, HTTP/2, upstream keepalive, worker tuning, and swap file
 - [x] **Phase 2: Frontend Polish and Mobile UX** - Fix mobile navigation breakpoint for small screens (completed 2026-03-20)
 - [x] **Phase 3: CV Service Quality** - Enable SQLite WAL mode for concurrent request correctness (completed 2026-03-23)
-- [ ] **Phase 4: Docker and Ansible Reliability** - Add memory limits, idempotent CV deploys, and post-deploy smoke test
+- [x] **Phase 4: Docker and Ansible Reliability** - Add memory limits, idempotent CV deploys, and post-deploy smoke test (completed 2026-04-02)
 - [ ] **Phase 5: Polish and Differentiators** - Add scroll-based nav highlighting and JSON-LD structured data
 
 ## Phase Details
@@ -68,10 +68,10 @@ Plans:
   1. `docker inspect` on SERP and CatLink containers shows memory limits configured (not `0` / unlimited)
   2. Running `ansible-playbook playbooks/site.yml --tags cv` twice in a row without changing any CV files produces no service restart on the second run (handler not triggered)
   3. Ansible CV deploy includes 3 passing `uri` smoke tests hitting all language PDF preview endpoints
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
-- [ ] 04-01-PLAN.md — Docker memory limits (SERP + CatLink) + CV deploy idempotency fix + post-deploy smoke test
+- [x] 04-01-PLAN.md — Docker memory limits (SERP + CatLink) + CV deploy idempotency fix + post-deploy smoke test
 
 ### Phase 5: Polish and Differentiators
 **Goal**: The portfolio demonstrates frontend skill (scroll-aware navigation) and is discoverable via structured data in search engines
@@ -97,5 +97,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Nginx and Infrastructure Hardening | 0/2 | Planned | - |
 | 2. Frontend Polish and Mobile UX | 1/1 | Complete   | 2026-03-20 |
 | 3. CV Service Quality | 1/1 | Complete   | 2026-03-23 |
-| 4. Docker and Ansible Reliability | 0/1 | Planned | - |
+| 4. Docker and Ansible Reliability | 1/1 | Complete   | 2026-04-02 |
 | 5. Polish and Differentiators | 0/? | Not started | - |
