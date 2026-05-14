@@ -281,6 +281,8 @@
       h1 { font-size: 1.6rem; }
       .bio { font-size: 0.88rem; }
       .avatar { width: 90px; height: 90px; }
+    }
+    @media (max-width: 768px) {
       .nav-toggle {
         display: flex;
         flex-direction: column;
@@ -290,7 +292,7 @@
         align-items: center;
       }
       .top-nav-links {
-        display: none;
+        display: none !important;
         position: absolute;
         top: 100%;
         left: 0;
@@ -300,10 +302,10 @@
         background: rgba(10, 10, 15, 0.97);
         border-bottom: 1px solid var(--border);
         padding: 0.5rem 0;
-        z-index: 99;
+        z-index: 101;
       }
       .top-nav-links.open {
-        display: flex;
+        display: flex !important;
       }
       .top-nav-links a {
         padding: 0.9rem 1.5rem;
@@ -378,23 +380,7 @@
     <p class="footer">Deployed on AWS with Terraform & Ansible</p>
   </div>
   </main>
-  <script>
-(function(){
-  var btn = document.querySelector('.nav-toggle');
-  var menu = document.querySelector('.top-nav-links');
-  if (!btn || !menu) return;
-  btn.addEventListener('click', function() {
-    var open = menu.classList.toggle('open');
-    btn.setAttribute('aria-expanded', String(open));
-  });
-  menu.addEventListener('click', function(e) {
-    if (e.target.tagName === 'A') {
-      menu.classList.remove('open');
-      btn.setAttribute('aria-expanded', 'false');
-    }
-  });
-})();
-  </script>
+  <script src="/nav.js" defer></script>
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4ece574f5bb2476097646165fe72beef"}'></script>
 </body>
 </html>
