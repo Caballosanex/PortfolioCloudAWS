@@ -60,14 +60,31 @@
     </div>
   </section>
 
-  <!-- Tech Stack -->
-  <section class="stack-section">
+  <!-- Tech Stack / Filter -->
+  <section class="stack-section" aria-labelledby="filter-heading">
     <div class="container">
-      <div class="stack-pills">
-        <span>Linux</span><span>AWS</span><span>Terraform</span><span>Ansible</span>
-        <span>Docker</span><span>Nginx</span><span>Python</span><span>C</span>
-        <span>Bash</span><span>FastAPI</span><span>React</span><span>PostgreSQL</span>
-        <span>Git</span><span>Cisco IOS</span>
+      <h2 id="filter-heading" class="visually-hidden">Filter projects by technology</h2>
+      <div class="stack-pills" role="group" aria-label="Filter projects by technology">
+        <button type="button" class="stack-pill" data-filter="linux">Linux</button>
+        <button type="button" class="stack-pill" data-filter="aws">AWS</button>
+        <button type="button" class="stack-pill" data-filter="terraform">Terraform</button>
+        <button type="button" class="stack-pill" data-filter="ansible">Ansible</button>
+        <button type="button" class="stack-pill" data-filter="docker">Docker</button>
+        <button type="button" class="stack-pill" data-filter="nginx">Nginx</button>
+        <button type="button" class="stack-pill" data-filter="python">Python</button>
+        <button type="button" class="stack-pill" data-filter="c">C</button>
+        <button type="button" class="stack-pill" data-filter="bash">Bash</button>
+        <button type="button" class="stack-pill" data-filter="fastapi">FastAPI</button>
+        <button type="button" class="stack-pill" data-filter="react">React</button>
+        <button type="button" class="stack-pill" data-filter="postgresql">PostgreSQL</button>
+        <button type="button" class="stack-pill" data-filter="git">Git</button>
+        <button type="button" class="stack-pill" data-filter="cisco-ios">Cisco IOS</button>
+      </div>
+      <div class="filter-status" data-filter-status hidden>
+        <span class="filter-status-count" data-filter-count></span>
+        <button type="button" class="filter-clear" data-filter-clear>
+          <span aria-hidden="true">×</span> Clear filters
+        </button>
       </div>
     </div>
   </section>
@@ -77,8 +94,13 @@
     <div class="container">
       <h2 class="section-title">Projects</h2>
 
+      <div class="filter-empty" data-filter-empty hidden>
+        <p>No projects match the selected technologies.</p>
+        <button type="button" class="btn btn-outline btn-sm" data-filter-clear>Reset filters</button>
+      </div>
+
       <!-- This Portfolio -->
-      <div class="project-card featured">
+      <div class="project-card featured" data-tech="terraform ansible aws docker nginx linux bash git certbot">
         <div class="project-badge">Infrastructure as Code</div>
         <h3>Cloud Portfolio Infrastructure</h3>
         <p class="project-desc">
@@ -96,7 +118,7 @@
       </div>
 
       <!-- SERP -->
-      <div class="project-card">
+      <div class="project-card" data-tech="fastapi react redux postgresql leaflet material-ui docker python linux git">
         <div class="project-badge">Hackathon - Talent Arena 2025</div>
         <h3>SERP - Emergency Response System</h3>
         <p class="project-desc">
@@ -120,7 +142,7 @@
       </div>
 
       <!-- CatLink -->
-      <div class="project-card">
+      <div class="project-card" data-tech="fastapi react leaflet websocket docker python git linux mcp-server gemini">
         <div class="project-badge">Hackathon - Talent Arena 2026</div>
         <div class="project-images">
           <img src="/assets/photos/Foto_TalentArena1.jpeg" alt="Team at Talent Arena 2026" loading="lazy" class="img-catlink">
@@ -148,7 +170,7 @@
       </div>
 
       <!-- WeatherMaster -->
-      <div class="project-card">
+      <div class="project-card" data-tech="flutter dart android git">
         <div class="project-badge">Open Source Contributor</div>
         <div class="project-images">
           <img src="/assets/images/new_thumbnail.png" alt="WeatherMaster app" loading="lazy">
@@ -173,7 +195,7 @@
       </div>
 
       <!-- mfkey -->
-      <div class="project-card">
+      <div class="project-card" data-tech="c arm embedded memory-management git linux">
         <div class="project-badge">Open Source - Embedded C</div>
         <h3>mfkey - Flipper Zero Performance Optimization</h3>
         <p class="project-desc">
@@ -208,7 +230,7 @@ if (program_state->key_buffer_count >= program_state->key_buffer_size) {
       </div>
 
       <!-- Apartaments Miquel -->
-      <div class="project-card">
+      <div class="project-card" data-tech="html css javascript seo git">
         <div class="project-badge">Production Client Project</div>
         <h3>Apartaments Miquel</h3>
         <p class="project-desc">
@@ -224,7 +246,7 @@ if (program_state->key_buffer_count >= program_state->key_buffer_size) {
       </div>
 
       <!-- NAS Proposal -->
-      <div class="project-card">
+      <div class="project-card" data-tech="synology ubiquiti 10gbe raid network-design cisco-ios linux">
         <div class="project-badge">Professional Consulting</div>
         <h3>Corporate NAS & Network Design - Ismael Prego</h3>
         <p class="project-desc">

@@ -1,5 +1,7 @@
 (function () {
-  function init() {
+  'use strict';
+
+  function initNav() {
     var btn = document.querySelector('.nav-toggle');
     var menu = document.querySelector('.nav-links');
     if (!btn || !menu) return;
@@ -10,13 +12,11 @@
 
     function open() {
       menu.classList.add('open');
-      menu.style.setProperty('display', 'flex', 'important');
       btn.setAttribute('aria-expanded', 'true');
     }
 
     function close() {
       menu.classList.remove('open');
-      menu.style.removeProperty('display');
       btn.setAttribute('aria-expanded', 'false');
     }
 
@@ -47,9 +47,135 @@
       close();
     });
 
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && menu.classList.contains('open')) {
+        close();
+        btn.focus();
+      }
+    });
+
     window.addEventListener('resize', function () {
       if (!isMobile()) close();
     });
+  }
+
+  function initFilters() {
+    var pills = document.querySelectorAll('.stack-pill[data-filter]');
+    var cards = document.querySelectorAll('.project-card[data-tech]');
+    var statusEl = document.querySelector('[data-filter-status]');
+    var countEl = document.querySelector('[data-filter-count]');
+    var emptyEl = document.querySelector('[data-filter-empty]');
+    var clearBtns = document.querySelectorAll('[data-filter-clear]');
+
+    if (!pills.length || !cards.length) return;
+
+    pills.forEach(function (pill) {
+      pill.setAttribute('aria-pressed', 'false');
+    });
+
+    var active = new Set();
+
+    function getCardTechs(card) {
+      return (card.getAttribute('data-tech') || '').toLowerCase().split(/\s+/).filter(Boolean);
+    }
+
+    function cardMatches(card) {
+      if (active.size === 0) return true;
+      var techs = getCardTechs(card);
+      for (var i = 0; i < techs.length; i++) {
+        if (active.has(techs[i])) return true;
+      }
+      return false;
+    }
+
+    function applyFilters() {
+      var visibleCount = 0;
+      var totalCount = cards.length;
+
+      cards.forEach(function (card) {
+        var wasHidden = card.classList.contains('is-hidden');
+        var shouldShow = cardMatches(card);
+
+        if (shouldShow) {
+          if (wasHidden) {
+            card.classList.remove('is-hidden');
+            card.classList.remove('is-filtering-out');
+            card.classList.add('is-filtering-in');
+            setTimeout(function () { card.classList.remove('is-filtering-in'); }, 320);
+          }
+          visibleCount++;
+        } else {
+          if (!wasHidden) {
+            card.classList.add('is-filtering-out');
+            setTimeout(function () {
+              if (!cardMatches(card)) card.classList.add('is-hidden');
+              card.classList.remove('is-filtering-out');
+            }, 220);
+          } else {
+            card.classList.add('is-hidden');
+          }
+        }
+      });
+
+      if (active.size === 0) {
+        if (statusEl) {
+          statusEl.hidden = true;
+        }
+        if (countEl) countEl.textContent = '';
+        if (emptyEl) emptyEl.hidden = true;
+      } else {
+        if (statusEl) statusEl.hidden = false;
+        if (countEl) {
+          var labels = Array.from(active).map(function (t) {
+            var pill = document.querySelector('.stack-pill[data-filter="' + t + '"]');
+            return pill ? pill.textContent.trim() : t;
+          });
+          countEl.innerHTML = '';
+          var strong = document.createElement('strong');
+          strong.textContent = visibleCount + ' of ' + totalCount;
+          countEl.appendChild(strong);
+          countEl.appendChild(document.createTextNode(' projects '));
+          var div = document.createElement('span');
+          div.className = 'filter-status-divider';
+          div.textContent = '·';
+          countEl.appendChild(div);
+          countEl.appendChild(document.createTextNode(' ' + labels.join(', ')));
+        }
+        if (emptyEl) emptyEl.hidden = visibleCount > 0;
+      }
+    }
+
+    function togglePill(pill) {
+      var key = pill.getAttribute('data-filter');
+      if (!key) return;
+      if (active.has(key)) {
+        active.delete(key);
+        pill.setAttribute('aria-pressed', 'false');
+      } else {
+        active.add(key);
+        pill.setAttribute('aria-pressed', 'true');
+      }
+      applyFilters();
+    }
+
+    function clearAll() {
+      active.clear();
+      pills.forEach(function (p) { p.setAttribute('aria-pressed', 'false'); });
+      applyFilters();
+    }
+
+    pills.forEach(function (pill) {
+      pill.addEventListener('click', function () { togglePill(pill); });
+    });
+
+    clearBtns.forEach(function (b) {
+      b.addEventListener('click', clearAll);
+    });
+  }
+
+  function init() {
+    initNav();
+    initFilters();
   }
 
   if (document.readyState === 'loading') {

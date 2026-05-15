@@ -201,55 +201,55 @@
       height: 22px;
     }
 
-    .top-nav {
+    /* Shared site nav - identical to portfolio */
+    .nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 100;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 900px;
+      margin: 0 auto;
       padding: 0.8rem 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(10, 10, 15, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      position: relative;
     }
-
-    .top-nav-logo {
+    .nav-logo {
       font-weight: 700;
       font-size: 1.1rem;
       color: var(--accent);
       text-decoration: none;
-      font-family: 'Inter', sans-serif;
       letter-spacing: -0.02em;
     }
-
-    .top-nav-links {
+    .nav-links {
       display: flex;
-      gap: 1.2rem;
+      gap: 1.5rem;
       align-items: center;
     }
-
-    .top-nav-links a {
+    .nav-links a {
       color: var(--text-muted);
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 500;
       transition: color 0.2s;
     }
-
-    .top-nav-links a:hover { color: var(--text); }
-
-    .top-nav-cta {
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
       background: var(--accent) !important;
       color: #fff !important;
       padding: 0.4rem 1rem;
       border-radius: 6px;
       font-size: 0.85rem !important;
     }
-
-    .top-nav-cta:hover { background: var(--accent-hover) !important; }
+    .nav-cta:hover { background: var(--accent-hover) !important; }
 
     .footer {
       margin-top: 3rem;
@@ -264,18 +264,36 @@
       background: none;
       border: none;
       cursor: pointer;
-      padding: 0.5rem;
+      padding: 0;
       color: var(--text);
       flex-shrink: 0;
+      position: relative;
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      transition: background 0.2s ease;
     }
+    .nav-toggle:hover { background: rgba(255, 255, 255, 0.04); }
+    .nav-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     .nav-toggle span {
+      position: absolute;
+      left: 50%;
+      top: 50%;
       display: block;
       width: 22px;
       height: 2px;
       background: currentColor;
-      margin: 5px 0;
       border-radius: 2px;
+      transform-origin: center;
+      transition: transform 0.28s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.18s ease, background-color 0.2s ease;
     }
+    .nav-toggle span:nth-child(1) { transform: translate(-50%, calc(-50% - 7px)); }
+    .nav-toggle span:nth-child(2) { transform: translate(-50%, -50%); }
+    .nav-toggle span:nth-child(3) { transform: translate(-50%, calc(-50% + 7px)); }
+    .nav-toggle[aria-expanded="true"] span { background-color: var(--accent); }
+    .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translate(-50%, -50%) rotate(45deg); }
+    .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; transform: translate(-50%, -50%) scaleX(0); }
+    .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translate(-50%, -50%) rotate(-45deg); }
 
     @media (max-width: 480px) {
       h1 { font-size: 1.6rem; }
@@ -283,60 +301,82 @@
       .avatar { width: 90px; height: 90px; }
     }
     @media (max-width: 768px) {
-      .nav-toggle {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        min-width: 44px;
-        min-height: 44px;
-        align-items: center;
-      }
-      .top-nav-links {
-        display: none !important;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
+      .nav-toggle { display: block; }
+      .nav-links {
         flex-direction: column;
         gap: 0;
+        position: absolute;
+        top: calc(100% + 1px);
+        left: 0;
+        right: 0;
         background: rgba(10, 10, 15, 0.97);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
         border-bottom: 1px solid var(--border);
-        padding: 0.5rem 0;
+        box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.6);
+        padding: 0.4rem 0;
         z-index: 101;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(-8px);
+        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s linear 0.25s;
       }
-      .top-nav-links.open {
-        display: flex !important;
+      .nav-links.open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s;
       }
-      .top-nav-links a {
-        padding: 0.9rem 1.5rem;
+      .nav-links a {
+        padding: 0.95rem 1.5rem;
         font-size: 0.95rem;
         border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         width: 100%;
         min-height: 44px;
         display: flex;
         align-items: center;
+        opacity: 0;
+        transform: translateX(-8px);
+        transition: opacity 0.25s ease, transform 0.25s ease, color 0.2s ease, background 0.2s ease;
       }
-      .top-nav-cta {
-        margin: 0.5rem 1.5rem !important;
+      .nav-links a:last-child { border-bottom: none; }
+      .nav-links a:hover { background: rgba(99, 102, 241, 0.06); color: var(--accent); }
+      .nav-links.open a { opacity: 1; transform: translateX(0); }
+      .nav-links.open a:nth-child(1) { transition-delay: 0.06s; }
+      .nav-links.open a:nth-child(2) { transition-delay: 0.10s; }
+      .nav-cta {
+        margin: 0.5rem 1.5rem 0.6rem !important;
         text-align: center;
         border-radius: 6px !important;
         width: auto;
         justify-content: center;
+        padding: 0.7rem 1rem !important;
+        border-bottom: none !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-toggle span, .nav-links, .nav-links a {
+        transition-duration: 0.01ms !important;
       }
     }
   </style>
 </head>
 <body>
-  <nav class="top-nav">
-    <a href="/" class="top-nav-logo">ASB</a>
-    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <div class="top-nav-links">
-      <a href="/portfolio">Portfolio</a>
-      <a href="/cv" class="top-nav-cta">CV</a>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">ASB</a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-links">
+        <a href="/portfolio">Portfolio</a>
+        <a href="/cv" class="nav-cta">CV</a>
+      </div>
     </div>
   </nav>
 
