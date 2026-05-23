@@ -12,8 +12,8 @@ summary: >
   Administrador Junior de Sistemas y Redes con más de 2 años de experiencia práctica en
   soporte IT, mantenimiento de sistemas y administración de redes. Competente en Linux,
   infraestructura cloud (AWS), Docker y ciberseguridad. Contribuidor activo de proyectos
-  open source con experiencia en desarrollo full-stack a nivel de hackathon. Actualmente
-  cursando el CFGS ASIX en iTIC Barcelona.
+  open source con experiencia en desarrollo full-stack a nivel de hackathon. Titulado del
+  CFGS ASIX en iTIC Barcelona.
 
 experience:
   - title: "Consultor de Infraestructura de Red"
@@ -47,7 +47,7 @@ experience:
 education:
   - degree: "CFGS en Administración de Sistemas Informáticos en Red (ASIX)"
     institution: "Institut TIC de Barcelona"
-    date: "Sep 2024 - Presente"
+    date: "Sep 2024 - May 2026"
     location: "Barcelona"
 
   - degree: "Programa de Desarrollo de Software"

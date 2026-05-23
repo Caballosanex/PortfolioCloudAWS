@@ -12,8 +12,8 @@ summary: >
   Junior Systems and Network Administrator with 2+ years of hands-on experience in IT
   support, systems maintenance, and network administration. Skilled in Linux, cloud
   infrastructure (AWS), Docker, and cybersecurity. Active open-source contributor with
-  experience in hackathon-level full-stack development. Currently completing ASIX at
-  iTIC Barcelona.
+  experience in hackathon-level full-stack development. ASIX graduate from iTIC
+  Barcelona.
 
 experience:
   - title: "Network Infrastructure Consultant"
@@ -47,7 +47,7 @@ experience:
 education:
   - degree: "Higher Certificate in Systems and Network Administration (ASIX)"
     institution: "Institut TIC de Barcelona"
-    date: "Sep 2024 - Present"
+    date: "Sep 2024 - May 2026"
     location: "Barcelona"
 
   - degree: "Software Development Program"
