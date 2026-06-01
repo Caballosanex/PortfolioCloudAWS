@@ -1,0 +1,21 @@
+---
+- name: Create MatchCota directory
+  file:
+    path: /opt/matchcota
+    state: directory
+    mode: '0755'
+
+- name: Copy MatchCota docker-compose
+  copy:
+    src: "{{ playbook_dir }}/../../docker/matchcota/docker-compose.yml"
+    dest: /opt/matchcota/docker-compose.yml
+
+- name: Pull MatchCota images
+  command: docker compose pull
+  args:
+    chdir: /opt/matchcota
+
+- name: Start MatchCota containers
+  command: docker compose up -d --force-recreate
+  args:
+    chdir: /opt/matchcota

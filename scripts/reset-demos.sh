@@ -13,4 +13,8 @@ docker restart serp-backend 2>/dev/null || true
 docker exec catlink-backend rm -f /app/catlink.db 2>/dev/null || true
 docker restart catlink-backend 2>/dev/null || true
 
+# MatchCota persists demo data in PostgreSQL (the seed is idempotent and fixed).
+# Restart the backend to clear active login sessions; the DB rows stay intact.
+docker restart matchcota-backend 2>/dev/null || true
+
 echo "[$(date)] Demo data reset complete."

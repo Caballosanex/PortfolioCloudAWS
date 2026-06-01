@@ -32,6 +32,8 @@
       tags: deploy-serp
     - role: deploy-catlink
       tags: deploy-catlink
+    - role: deploy-matchcota
+      tags: deploy-matchcota
     - role: demo-reset
       tags: demo-reset
     - role: anubis
