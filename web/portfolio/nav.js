@@ -173,9 +173,151 @@
     });
   }
 
+  function initPdfViewer() {
+    var modal = document.querySelector('[data-pdf-modal]');
+    var triggers = document.querySelectorAll('[data-pdf]');
+    if (!modal || !triggers.length) return;
+
+    var frame = modal.querySelector('[data-pdf-frame]');
+    var titleEl = modal.querySelector('[data-pdf-modal-title]');
+    var openLink = modal.querySelector('[data-pdf-open]');
+    var closeEls = modal.querySelectorAll('[data-pdf-close]');
+    var lastTrigger = null;
+
+    function open(url, title) {
+      if (frame) frame.src = url;
+      if (openLink) openLink.href = url;
+      if (titleEl && title) titleEl.textContent = title;
+      modal.hidden = false;
+      document.body.classList.add('modal-open');
+    }
+
+    function close() {
+      modal.hidden = true;
+      document.body.classList.remove('modal-open');
+      // Stop rendering / free the embedded document
+      if (frame) frame.src = 'about:blank';
+      if (lastTrigger) lastTrigger.focus();
+    }
+
+    triggers.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var url = btn.getAttribute('data-pdf');
+        // Mobile browsers (especially iOS Safari) can't render a PDF inside an
+        // iframe — they show a broken/blank icon. Open it directly instead so
+        // the device's native PDF viewer handles it.
+        if (window.matchMedia('(max-width: 768px)').matches) {
+          window.open(url, '_blank', 'noopener');
+          return;
+        }
+        lastTrigger = btn;
+        open(url, btn.getAttribute('data-pdf-title'));
+      });
+    });
+
+    closeEls.forEach(function (el) {
+      el.addEventListener('click', close);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+  }
+
+  function initYearTimeline() {
+    var section = document.getElementById('projects');
+    var railItems = Array.prototype.slice.call(document.querySelectorAll('[data-year-rail]'));
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.project-card[data-year]'));
+    var chip = document.querySelector('[data-year-chip]');
+    if (!section || !cards.length) return;
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ticking = false;
+
+    function visibleCards() {
+      return cards.filter(function (c) {
+        // skip cards hidden by the skill filter
+        return !c.classList.contains('is-hidden') && c.offsetParent !== null;
+      });
+    }
+
+    function activeYear() {
+      var vis = visibleCards();
+      if (!vis.length) return null;
+      var refLine = window.innerHeight * 0.32;
+      var current = vis[0];
+      vis.forEach(function (c) {
+        if (c.getBoundingClientRect().top <= refLine) current = c;
+      });
+      return current.getAttribute('data-year');
+    }
+
+    function sectionInView() {
+      var r = section.getBoundingClientRect();
+      return r.bottom > 0 && r.top < window.innerHeight;
+    }
+
+    function update() {
+      if (!sectionInView()) {
+        if (chip) chip.classList.remove('is-visible');
+        return;
+      }
+      var year = activeYear();
+      if (!year) return;
+
+      railItems.forEach(function (it) {
+        it.classList.toggle('is-active', it.getAttribute('data-year-rail') === year);
+      });
+      cards.forEach(function (c) {
+        if (c.classList.contains('is-hidden')) return;
+        c.classList.toggle('off-year', c.getAttribute('data-year') !== year);
+      });
+      if (chip) {
+        chip.textContent = year;
+        chip.classList.add('is-visible');
+      }
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function () {
+        update();
+        ticking = false;
+      });
+    }
+
+    // Clicking a year jumps to its first (visible) project
+    railItems.forEach(function (it) {
+      it.addEventListener('click', function () {
+        var y = it.getAttribute('data-year-rail');
+        var target = visibleCards().filter(function (c) {
+          return c.getAttribute('data-year') === y;
+        })[0];
+        if (!target) return;
+        var top = target.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({ top: top, behavior: reduceMotion ? 'auto' : 'smooth' });
+      });
+    });
+
+    // Recompute after a skill filter changes the visible set (let the animation settle)
+    document.addEventListener('click', function (e) {
+      var t = e.target;
+      if (t && t.closest && t.closest('.stack-pill, [data-filter-clear]')) {
+        setTimeout(update, 360);
+      }
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  }
+
   function init() {
     initNav();
     initFilters();
+    initPdfViewer();
+    initYearTimeline();
   }
 
   if (document.readyState === 'loading') {

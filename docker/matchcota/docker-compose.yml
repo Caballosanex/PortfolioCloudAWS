@@ -1,0 +1,84 @@
+# MatchCota demo deployment — adapted for portfolio
+# Runs on ports 3003 (frontend) and 8003 (backend)
+# PostgreSQL is internal-only on the matchcota-net Docker network (not exposed to host)
+# ENVIRONMENT=development -> permissive CORS + tenant resolution via X-Tenant-Slug header
+
+services:
+  db:
+    image: docker.io/library/postgres:15-alpine
+    container_name: matchcota-db
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    environment:
+      - POSTGRES_USER=matchcota
+      - POSTGRES_PASSWORD=matchcota_demo_pass
+      - POSTGRES_DB=matchcota
+    volumes:
+      - matchcota_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U matchcota"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - matchcota-net
+
+  backend:
+    image: docker.io/caballosanex/matchcota-backend:latest
+    container_name: matchcota-backend
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    ports:
+      - "127.0.0.1:8003:8000"
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=false
+      - DATABASE_URL=postgresql://matchcota:matchcota_demo_pass@db:5432/matchcota
+      - REDIS_ENABLED=false
+      - S3_ENABLED=false
+      - SECRET_KEY=demo-portfolio-secret-key-not-for-production
+      - JWT_SECRET_KEY=demo-portfolio-jwt-secret-key-not-for-production
+      - WILDCARD_DOMAIN=matchcota.local
+      # NOTE: CORS_ORIGINS intentionally omitted. The setting is parsed as a JSON
+      # list (pydantic), so a bare URL would crash startup. The frontend and API
+      # are same-origin under asanchezbl.dev, so no CORS configuration is needed.
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - matchcota-net
+
+  frontend:
+    image: docker.io/caballosanex/matchcota-frontend:latest
+    container_name: matchcota-frontend
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    ports:
+      - "127.0.0.1:3003:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - matchcota-net
+
+networks:
+  matchcota-net:
+    driver: bridge
+
+volumes:
+  matchcota_pgdata:

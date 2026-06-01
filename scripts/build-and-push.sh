@@ -9,6 +9,7 @@ TARGET_ARCH="linux/arm64" # EC2 is t4g.small (ARM64)
 PORTFOLIO_DIR="/Users/alex/Documents/GITs/PortfolioCloudAWS"
 SERP_SRC="/Users/alex/Documents/GITs/SERP"
 CATLINK_SRC="/Users/alex/Documents/GITs/CatLink"
+MATCHCOTA_SRC="/Users/alex/Documents/GITs/MatchCota"
 
 # Create a temporary workspace to avoid touching the real repos
 WORK_DIR=$(mktemp -d)
@@ -18,6 +19,9 @@ cd "$WORK_DIR"
 echo "=== 1. Copying source code ==="
 rsync -a --exclude=.git --exclude=__pycache__ --exclude=node_modules "$SERP_SRC/" ./SERP/
 rsync -a --exclude=.git --exclude=__pycache__ --exclude=node_modules "$CATLINK_SRC/" ./CatLink/
+rsync -a --exclude=.git --exclude=__pycache__ --exclude=node_modules \
+      --exclude=.venv --exclude=.planning --exclude=.pytest_cache --exclude=uploads \
+      "$MATCHCOTA_SRC/" ./MatchCota/
 
 echo "=== 2. Applying SERP Patches ==="
 # SERP Backend
@@ -86,6 +90,61 @@ CMD ["serve", "-s", "dist", "-l", "3000", "--no-compression"]
 EOF
 
 
+echo "=== 3b. Applying MatchCota Patches ==="
+# Backend: drop in the production Dockerfile + entrypoint + idempotent demo seed.
+# (requirements.txt is reused from the repo as-is.)
+cp "$PORTFOLIO_DIR/docker/matchcota/backend/Dockerfile"     ./MatchCota/backend/Dockerfile
+cp "$PORTFOLIO_DIR/docker/matchcota/backend/entrypoint.sh"  ./MatchCota/backend/entrypoint.sh
+cp "$PORTFOLIO_DIR/docker/matchcota/backend/seed_demo.py"   ./MatchCota/backend/seed_demo.py
+chmod +x ./MatchCota/backend/entrypoint.sh
+
+# Frontend: production Dockerfile (multi-stage Vite build + serve)
+cp "$PORTFOLIO_DIR/docker/matchcota/frontend/Dockerfile"    ./MatchCota/frontend/Dockerfile
+
+# Frontend patch 1: serve the SPA under the /demo/matchcota/ base path (asset URLs)
+sed -i '' "s|plugins: \[react()\],|plugins: [react()],\n  base: '/demo/matchcota/',|" ./MatchCota/frontend/vite.config.js
+
+# Frontend patch 2: React Router must route against the base path too — Vite's
+# `base` only rewrites assets. Without basename, every route 404s under the subpath.
+# (Same pattern SERP uses: basename="/demo/serp".)
+sed -i '' 's|<BrowserRouter>|<BrowserRouter basename="/demo/matchcota">|' ./MatchCota/frontend/src/App.jsx
+
+# Frontend patch 3: bypass subdomain-based tenant detection. When VITE_DEMO_TENANT
+# is baked at build time, resolveHostContext() returns a fixed tenant context so
+# the app renders the tenant Home (not the registration Landing) under any path.
+# The injected block is self-contained (does not reference the later `const hostname`).
+python3 << 'PYEOF'
+path = './MatchCota/frontend/src/routing/hostRouting.js'
+with open(path) as f:
+    src = f.read()
+
+inject = """export function resolveHostContext() {
+  // Demo mode: fixed tenant context when VITE_DEMO_TENANT is baked at build time.
+  // Bypasses subdomain detection so the app works under /demo/matchcota/.
+  const demoSlug = (import.meta.env.VITE_DEMO_TENANT || '').trim();
+  if (demoSlug) {
+    return {
+      hostname: normalizeHostname(window.location.hostname),
+      baseDomain: getBaseDomain(),
+      isProduction: false,
+      isApexHost: false,
+      isTenantHost: true,
+      tenantSlug: demoSlug,
+      invalidHost: false,
+    };
+  }
+"""
+
+marker = 'export function resolveHostContext() {'
+assert src.count(marker) == 1, "expected exactly one resolveHostContext definition"
+src = src.replace(marker, inject, 1)
+
+with open(path, 'w') as f:
+    f.write(src)
+print("Patched hostRouting.js (VITE_DEMO_TENANT shortcut)")
+PYEOF
+
+
 echo "=== 4. Building and Pushing SERP Images ==="
 # SERP Backend
 echo "Building SERP Backend..."
@@ -108,6 +167,21 @@ docker buildx build --platform $TARGET_ARCH -t $DOCKER_USERNAME/catlink-backend:
 # CatLink Frontend
 echo "Building CatLink Frontend..."
 docker buildx build --platform $TARGET_ARCH -t $DOCKER_USERNAME/catlink-frontend:latest --push ./CatLink/frontend
+
+
+echo "=== 6. Building and Pushing MatchCota Images ==="
+# MatchCota Backend
+echo "Building MatchCota Backend..."
+docker buildx build --platform $TARGET_ARCH -t $DOCKER_USERNAME/matchcota-backend:latest --push ./MatchCota/backend
+
+# MatchCota Frontend
+echo "Building MatchCota Frontend..."
+docker buildx build --platform $TARGET_ARCH -t $DOCKER_USERNAME/matchcota-frontend:latest \
+  --build-arg VITE_DEMO_TENANT=demo \
+  --build-arg VITE_API_URL=/demo/matchcota/api/v1 \
+  --build-arg VITE_ENVIRONMENT=development \
+  --build-arg VITE_BASE_DOMAIN=matchcota.local \
+  --push ./MatchCota/frontend
 
 
 echo "=== Done! Cleaning up... ==="
