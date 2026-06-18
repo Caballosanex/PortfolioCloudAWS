@@ -83,25 +83,28 @@ body.modal-open{overflow:hidden}
 @media (max-width:768px){.pdf-modal{padding:0}.pdf-modal-dialog{height:100vh;max-width:none;border-radius:0;border:none}}
 /* ===== Scroll-synced year timeline ===== */
 .timeline-projects{min-width:0}
-.year-rail{display:none}
 /* extend project-card transition to include opacity for the focus/dim effect */
 .project-card{transition:border-color 0.3s,transform 0.25s,box-shadow 0.25s,opacity 0.35s}
 .project-card.off-year{opacity:0.4;transform:scale(0.97)}
 .project-card.off-year:hover{opacity:1;transform:translateY(-3px)}
-/* mobile sticky year chip */
-.year-chip{position:fixed;top:64px;right:14px;z-index:90;background:var(--surface);border:1px solid var(--accent);color:var(--accent);font-weight:700;font-size:0.82rem;padding:0.3rem 0.75rem;border-radius:999px;font-family:'JetBrains Mono',monospace;opacity:0;transform:translateY(-8px);transition:opacity 0.25s,transform 0.25s;pointer-events:none}
-.year-chip.is-visible{opacity:1;transform:none}
+
+/* Mobile (default): horizontal year bar, sticky just under the fixed header.
+   Header on mobile is ~70px (44px hamburger + 0.8rem padding), so top:70px. */
+.year-rail{position:sticky;top:70px;z-index:50;display:flex;justify-content:center;align-items:baseline;gap:1.4rem;margin:0 -1.5rem 1.5rem;padding:0.5rem 1rem;background:rgba(10,10,15,0.92);backdrop-filter:blur(10px);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.year-rail-item{appearance:none;-webkit-appearance:none;background:none;border:none;padding:0;cursor:pointer;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:0.8rem;line-height:1;color:var(--text-dim);opacity:0.45;position:relative;transition:color 0.3s,opacity 0.3s,font-size 0.3s,transform 0.3s}
+.year-rail-item:hover{color:var(--text-muted);opacity:0.8}
+.year-rail-item.is-active{color:var(--accent);opacity:1;font-size:1.2rem}
+
+/* Desktop: vertical sticky rail in the left column */
 @media(min-width:880px){
   .timeline-layout{display:grid;grid-template-columns:56px minmax(0,1fr);column-gap:2rem;align-items:start;max-width:980px}
   .timeline-layout>.section-title{grid-column:1 / -1}
-  .year-rail{display:flex;flex-direction:column;gap:1.3rem;position:sticky;top:90px;align-self:start;padding-top:0.3rem}
-  .year-chip{display:none}
+  .year-rail{flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:1.3rem;position:sticky;top:90px;align-self:start;margin:0;padding:0.3rem 0 0;background:none;backdrop-filter:none;border:none}
+  .year-rail-item{text-align:left;transform-origin:left center}
+  .year-rail-item.is-active{font-size:1.4rem;transform:translateX(3px)}
+  .year-rail-item.is-active::before{content:'';position:absolute;left:-13px;top:50%;width:3px;height:1.05em;background:var(--accent);border-radius:2px;transform:translateY(-50%)}
 }
-.year-rail-item{appearance:none;-webkit-appearance:none;background:none;border:none;padding:0;cursor:pointer;text-align:left;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:0.8rem;line-height:1;color:var(--text-dim);opacity:0.45;position:relative;transition:color 0.3s,opacity 0.3s,font-size 0.3s,transform 0.3s;transform-origin:left center}
-.year-rail-item:hover{color:var(--text-muted);opacity:0.8}
-.year-rail-item.is-active{color:var(--accent);opacity:1;font-size:1.4rem;transform:translateX(3px)}
-.year-rail-item.is-active::before{content:'';position:absolute;left:-13px;top:50%;width:3px;height:1.05em;background:var(--accent);border-radius:2px;transform:translateY(-50%)}
 @media(prefers-reduced-motion:reduce){
-  .project-card,.year-rail-item,.year-chip{transition:none}
+  .project-card,.year-rail-item{transition:none}
   .project-card.off-year{transform:none}
 }
