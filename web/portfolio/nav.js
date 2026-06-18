@@ -228,7 +228,6 @@
     var section = document.getElementById('projects');
     var railItems = Array.prototype.slice.call(document.querySelectorAll('[data-year-rail]'));
     var cards = Array.prototype.slice.call(document.querySelectorAll('.project-card[data-year]'));
-    var chip = document.querySelector('[data-year-chip]');
     if (!section || !cards.length) return;
 
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -258,10 +257,7 @@
     }
 
     function update() {
-      if (!sectionInView()) {
-        if (chip) chip.classList.remove('is-visible');
-        return;
-      }
+      if (!sectionInView()) return;
       var year = activeYear();
       if (!year) return;
 
@@ -272,10 +268,6 @@
         if (c.classList.contains('is-hidden')) return;
         c.classList.toggle('off-year', c.getAttribute('data-year') !== year);
       });
-      if (chip) {
-        chip.textContent = year;
-        chip.classList.add('is-visible');
-      }
     }
 
     function onScroll() {
