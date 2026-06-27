@@ -3,6 +3,8 @@
 *.tfstate
 *.tfstate.backup
 *.tfvars
+*.tfplan
+tfplan
 terraform/.terraform.lock.hcl
 terraform/backend-config.hcl
 crash.log
