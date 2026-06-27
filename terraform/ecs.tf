@@ -226,9 +226,7 @@ resource "aws_service_discovery_service" "serp" {
     routing_policy = "MULTIVALUE"
   }
 
-  health_check_custom_config {
-    failure_threshold = 1
-  }
+  health_check_custom_config {}
 }
 
 resource "aws_service_discovery_service" "catlink" {
@@ -244,9 +242,7 @@ resource "aws_service_discovery_service" "catlink" {
     routing_policy = "MULTIVALUE"
   }
 
-  health_check_custom_config {
-    failure_threshold = 1
-  }
+  health_check_custom_config {}
 }
 
 resource "aws_service_discovery_service" "matchcota" {
@@ -262,9 +258,7 @@ resource "aws_service_discovery_service" "matchcota" {
     routing_policy = "MULTIVALUE"
   }
 
-  health_check_custom_config {
-    failure_threshold = 1
-  }
+  health_check_custom_config {}
 }
 
 # --- Task Definitions ---
