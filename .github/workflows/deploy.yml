@@ -1,0 +1,124 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - 'lambda/**'
+      - 'docker/**'
+      - 'scripts/ci-build.sh'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  # Detect which paths changed across ALL commits in the push
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      web: ${{ steps.filter.outputs.web }}
+      lambda: ${{ steps.filter.outputs.lambda }}
+      docker: ${{ steps.filter.outputs.docker }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            web:
+              - 'web/**'
+            lambda:
+              - 'lambda/**'
+            docker:
+              - 'docker/**'
+              - 'scripts/ci-build.sh'
+
+  # --- Job 1: Static content ---
+  deploy-static:
+    needs: changes
+    if: needs.changes.outputs.web == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: eu-west-1
+      - name: Sync to S3
+        run: |
+          aws s3 sync web/landing/ s3://asanchezbl-static/ --delete \
+            --exclude "demo/*" --exclude "cv/*" --exclude "portfolio/*" --exclude "assets/*"
+          aws s3 sync web/portfolio/ s3://asanchezbl-static/portfolio/ --delete
+          aws s3 sync web/cv-page/ s3://asanchezbl-static/cv/ --exclude "*.pdf"
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_DIST_ID }} --paths "/*"
+
+  # --- Job 2: Lambda functions ---
+  deploy-lambdas:
+    needs: changes
+    if: needs.changes.outputs.lambda == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: eu-west-1
+      - name: Update Lambda functions
+        run: |
+          for fn_dir in lambda/*/; do
+            fn_name=$(basename "$fn_dir")
+            case "$fn_name" in
+              cost_reporter) aws_name="asanchezbl-portfolio-cost-reporter" ;;
+              cv_counter)    aws_name="asanchezbl-portfolio-cv-counter" ;;
+              demo_reset)    aws_name="asanchezbl-portfolio-demo-reset" ;;
+              *) continue ;;
+            esac
+            cd "$fn_dir"
+            zip -j handler.zip handler.py
+            aws lambda update-function-code \
+              --function-name "$aws_name" \
+              --zip-file fileb://handler.zip \
+              --region eu-west-1
+            cd ../..
+            echo "Updated $aws_name"
+          done
+
+  # --- Job 3: Docker images + SPA frontends ---
+  build-and-deploy:
+    needs: changes
+    if: needs.changes.outputs.docker == 'true'
+    runs-on: ubuntu-24.04-arm64
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clone source repos
+        run: |
+          git clone --depth 1 https://github.com/Caballosanex/SERP.git /tmp/SERP
+          git clone --depth 1 https://github.com/Caballosanex/CatLink.git /tmp/CatLink
+          git clone --depth 1 https://github.com/Caballosanex/MatchCota.git /tmp/MatchCota
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: eu-west-1
+      - name: Login to ECR
+        run: |
+          aws ecr get-login-password --region eu-west-1 | \
+            docker login --username AWS --password-stdin 649966626787.dkr.ecr.eu-west-1.amazonaws.com
+      - name: Build and deploy
+        run: scripts/ci-build.sh
+        env:
+          ECR_REGISTRY: 649966626787.dkr.ecr.eu-west-1.amazonaws.com
+          S3_BUCKET: asanchezbl-static
+          BUILD_SERP: "true"
+          BUILD_CATLINK: "true"
+          BUILD_MATCHCOTA: "true"
+          BUILD_FRONTENDS: "true"
+      - name: Force ECS redeployment
+        run: |
+          aws ecs update-service --cluster asanchezbl-portfolio --service serp-backend --force-new-deployment --region eu-west-1
+          aws ecs update-service --cluster asanchezbl-portfolio --service catlink-backend --force-new-deployment --region eu-west-1
+          aws ecs update-service --cluster asanchezbl-portfolio --service matchcota --force-new-deployment --region eu-west-1
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_DIST_ID }} --paths "/*"

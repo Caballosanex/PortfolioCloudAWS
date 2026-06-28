@@ -70,6 +70,10 @@ resource "aws_lambda_function" "cost_reporter" {
   timeout          = 30
   memory_size      = 128
 
+  lifecycle {
+    ignore_changes = [filename, source_code_hash]
+  }
+
   tags = { Name = "${var.project_name}-cost-reporter" }
 }
 
