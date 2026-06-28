@@ -1,6 +1,0 @@
----
-- name: restart anubis
-  systemd:
-    name: anubis
-    state: restarted
-    daemon_reload: true
