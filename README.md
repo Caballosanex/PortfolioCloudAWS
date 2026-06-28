@@ -1,16 +1,17 @@
 # Portfolio Infrastructure — asanchezbl.dev
 
-Infrastructure-as-Code and deployment automation behind my personal portfolio at [asanchezbl.dev](https://asanchezbl.dev). Everything here — from DNS records to systemd units — is reproducible from scratch with Terraform and Ansible.
+Infrastructure-as-Code and CI/CD automation behind my personal portfolio at [asanchezbl.dev](https://asanchezbl.dev). Everything is managed with Terraform, deployed automatically via GitHub Actions, and runs serverless on AWS.
 
 ## Live
 
 | URL | What |
 |-----|------|
 | [asanchezbl.dev](https://asanchezbl.dev) | Landing page |
-| [asanchezbl.dev/cv](https://asanchezbl.dev/cv) | CV — PDF preview + download (ES / EN / CA) |
+| [asanchezbl.dev/cv](https://asanchezbl.dev/cv/) | CV — PDF download (ES / EN / CA) + visit counter |
 | [asanchezbl.dev/portfolio](https://asanchezbl.dev/portfolio) | Portfolio |
-| [asanchezbl.dev/demo/serp](https://asanchezbl.dev/demo/serp) | SERP — Emergency Response System (live demo) |
-| [asanchezbl.dev/demo/catlink](https://asanchezbl.dev/demo/catlink) | CatLink — AI EV Charger Agent (live demo) |
+| [asanchezbl.dev/demo/serp](https://asanchezbl.dev/demo/serp/) | SERP — Emergency Response System (live demo) |
+| [asanchezbl.dev/demo/catlink](https://asanchezbl.dev/demo/catlink/) | CatLink — AI EV Charger Agent (live demo) |
+| [asanchezbl.dev/demo/matchcota](https://asanchezbl.dev/demo/matchcota/) | MatchCota — Pet Adoption Platform (live demo) |
 
 ## Architecture
 
@@ -18,165 +19,128 @@ Infrastructure-as-Code and deployment automation behind my personal portfolio at
 Internet
    │
    ▼
-Cloudflare (DNS-only, grey-cloud)
+Cloudflare DNS (asanchezbl.dev)
    │
    ▼
-AWS EC2 t4g.small — eu-west-1 (ARM64/Graviton)
+CloudFront (CDN + ACM SSL + security headers)
    │
-   ├── Nginx :80/:443  (SSL via Let's Encrypt / Certbot)
-   │      │
-   │      ▼
-   ├── Anubis :8923   (PoW WAF — blocks AI scrapers & bots)
-   │      │
-   │      ▼
-   ├── Nginx :8080    (internal — clean traffic only)
-   │      ├── /cv/          → CV service :8001  (FastAPI + WeasyPrint)
-   │      ├── /demo/serp/   → SERP frontend :3001
-   │      ├── /demo/catlink/→ CatLink frontend :3002
-   │      ├── /demo/*/api/  → SERP API :5001 / CatLink API :8002
-   │      └── /             → static files (landing, portfolio, assets)
-   │
-   ├── Docker Compose
-   │      ├── SERP (FastAPI + React + PostgreSQL, Nokia API mocked)
-   │      └── CatLink (FastAPI + React + Gemini mocked)
-   │
-   └── Security
-          ├── UFW — ports 80, 443, 2222 only
-          ├── fail2ban — SSH + Nginx brute-force protection
-          └── Anubis — PoW challenge (difficulty 6) for all proxied routes
+   ├── S3 ──────────── static content (landing, portfolio, CV PDFs, 3 SPA frontends, assets)
+   ├── Lambda ───────── CV visit counter (DynamoDB)
+   └── API Gateway ──── HTTP API (path rewriting, throttling)
+          │
+          ▼ (VPC Link)
+     Cloud Map (service discovery)
+          │
+          ├── ECS Fargate Spot ── SERP backend (FastAPI, mock data)
+          ├── ECS Fargate Spot ── CatLink backend (FastAPI, mocked Nokia + Gemini)
+          └── ECS Fargate Spot ── MatchCota backend (FastAPI) + Postgres 15 sidecar
+                                    └── EFS (persistent data)
+
+Automation:
+   ├── EventBridge → Lambda ── demo-reset (every 6h, restarts SERP + CatLink)
+   └── EventBridge → Lambda ── cost-reporter (weekly → Discord webhook)
 ```
 
-Pre-built ARM64 Docker images are built locally and pushed to Docker Hub (`caballosanex/*`), then pulled on the server — the EC2 instance never builds images (OOM prevention on 2 GB RAM).
+All backend images are ARM64 (Graviton), running on Fargate Spot across 2 AZs in eu-west-1.
 
 ## Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Cloud | AWS EC2 (t4g.small), Elastic IP, AWS Budgets |
+| CDN / SSL | CloudFront + ACM (auto-renewal, TLSv1.3) |
 | DNS | Cloudflare (DNS-only) |
-| IaC | Terraform — VPC, EC2, security groups, EIP, budget alerts |
-| Config management | Ansible — 11 roles, idempotent full-stack deployment |
-| Reverse proxy / SSL | Nginx + Certbot (Let's Encrypt, auto-renewal) |
-| WAF | Anubis (Proof-of-Work bot mitigation) |
-| CV service | Python / FastAPI + WeasyPrint + SQLite visit counter |
-| Demos | Docker Compose (SERP + CatLink) |
-| OS | Ubuntu 24.04 LTS (ARM64) |
+| Static hosting | S3 (OAC, private bucket) |
+| API routing | API Gateway HTTP API (path rewriting, throttling) |
+| Compute | ECS Fargate Spot (ARM64), Lambda |
+| Database | DynamoDB (CV counter), PostgreSQL 15 (MatchCota sidecar on EFS) |
+| Container registry | ECR (4 repos, lifecycle policies) |
+| IaC | Terraform (102 resources, S3 backend) |
+| CI/CD | GitHub Actions (OIDC auth, auto-deploy on push) |
+| Monitoring | CloudWatch Logs (7-day retention), weekly cost reports via Discord |
+| Budget | AWS Budgets alert at $15/month |
 
 ## Repository Structure
 
 ```
 .
-├── terraform/              # AWS infrastructure (VPC, EC2, EIP, budget)
-│   ├── vpc.tf
-│   ├── ec2.tf
-│   ├── security_groups.tf
-│   ├── dns.tf              # Cloudflare DNS records
-│   ├── budget.tf           # AWS Budgets alert (<$15/month)
-│   ├── variables.tf
-│   ├── terraform.tfvars.example
-│   └── state-bootstrap/    # S3 + DynamoDB for remote state
+├── .github/workflows/
+│   └── deploy.yml              # CI/CD: auto-deploy on push to main
 │
-├── ansible/
-│   ├── playbooks/
-│   │   ├── site.yml        # Full deploy (base + apps)
-│   │   ├── base.yml        # System setup only
-│   │   └── deploy.yml      # App deploy only
-│   ├── inventory/
-│   │   ├── hosts.yml
-│   │   └── group_vars/all.yml
-│   └── roles/
-│       ├── base            # Packages, system config
-│       ├── security        # SSH hardening, UFW, fail2ban
-│       ├── docker          # Docker CE (ARM64)
-│       ├── nginx           # Nginx config (double-proxy setup)
-│       ├── certbot         # SSL certificates
-│       ├── anubis          # PoW WAF
-│       ├── deploy-landing  # Landing page static files
-│       ├── deploy-cv       # CV FastAPI service + systemd unit
-│       ├── deploy-portfolio# Portfolio static files
-│       ├── deploy-serp     # SERP Docker Compose
-│       ├── deploy-catlink  # CatLink Docker Compose
-│       └── demo-reset      # Cron: reset demo data every 6h
+├── terraform/                  # All AWS infrastructure
+│   ├── cloudfront.tf           # CDN, behaviors, response headers, CF Function
+│   ├── s3_static.tf            # Static hosting bucket
+│   ├── ecs.tf                  # Fargate cluster, task defs, services, EFS
+│   ├── api_gateway.tf          # HTTP API, routes, VPC Link
+│   ├── ecr.tf                  # Container registries + lifecycle policies
+│   ├── acm.tf                  # SSL certificate (us-east-1)
+│   ├── lambda.tf               # CV counter + demo reset Lambdas
+│   ├── cost_reporter.tf        # Weekly cost report Lambda
+│   ├── dynamodb.tf             # CV visit counter table
+│   ├── github_oidc.tf          # GitHub Actions OIDC + IAM role
+│   ├── vpc.tf                  # VPC, 2 public subnets, IGW
+│   ├── dns.tf                  # Cloudflare DNS records
+│   ├── budget.tf               # Cost alerts
+│   └── providers.tf / variables.tf / outputs.tf
 │
-├── nginx/
-│   └── conf.d/asanchezbl.dev.conf   # Full Nginx config with security headers
+├── lambda/
+│   ├── cost_reporter/          # Weekly AWS cost digest → Discord
+│   ├── cv_counter/             # Visit counter (DynamoDB)
+│   └── demo_reset/             # ECS force-redeployment (every 6h)
 │
 ├── web/
-│   ├── landing/            # index.html, robots.txt, sitemap.xml
-│   ├── portfolio/          # index.html, style.css
-│   └── cv-service/         # FastAPI app, Jinja2 templates, YAML CV data
-│       ├── app.py
-│       ├── data/           # cv_es.yml, cv_en.yml, cv_ca.yml
-│       ├── templates/      # cv.html (PDF), cv_page.html (web UI)
-│       └── static/         # cv.js
+│   ├── landing/                # Landing page (HTML, robots.txt, sitemap)
+│   ├── portfolio/              # Portfolio page (HTML, CSS, JS)
+│   ├── cv-page/                # Static CV page with counter JS
+│   └── cv-service/             # PDF generator (WeasyPrint, local use only)
 │
 ├── docker/
-│   ├── serp/               # docker-compose.yml + Nokia API mock patches
-│   └── catlink/            # docker-compose.yml + Gemini/Nokia mock patches
+│   ├── serp/                   # Mock patches + docker-compose for SERP
+│   ├── catlink/                # Mock patches + docker-compose for CatLink
+│   └── matchcota/              # Dockerfile, entrypoint, seed data for MatchCota
+│
+├── assets/
+│   ├── images/                 # Portfolio screenshots
+│   ├── photos/                 # Personal photos (team, events)
+│   └── certificates/           # Certification docs
 │
 └── scripts/
-    ├── build-and-push.sh   # Build ARM64 images locally, push to Docker Hub
-    └── reset-demos.sh      # Reset demo DBs (run by cron on server)
+    ├── ci-build.sh             # CI: patch source, build images → ECR, SPAs → S3
+    └── build-and-push.sh       # Local: same as ci-build.sh but for macOS
 ```
 
-## Deploy
+## CI/CD
 
-### Prerequisites
+Push to `main` triggers GitHub Actions automatically. The workflow detects what changed and runs the right job:
 
-- Terraform ≥ 1.5
-- Ansible ≥ 2.15
-- AWS CLI configured (`aws configure`)
-- Cloudflare API token with DNS edit permissions
-- SSH key pair
+| Changed files | What happens |
+|---|---|
+| `web/**` or `assets/**` | Syncs to S3, invalidates CloudFront |
+| `lambda/**` | Zips and updates Lambda function code |
+| `docker/**` or `scripts/ci-build.sh` | Clones source repos, applies patches, builds ARM64 images → ECR, builds SPAs → S3, redeploys ECS |
 
-### 1 — Infrastructure (Terraform)
-
-```bash
-cp terraform/terraform.tfvars.example terraform/terraform.tfvars
-# Fill in: cloudflare_api_token, cloudflare_zone_id, ssh_public_key_path
-
-cd terraform
-terraform init
-terraform apply
-```
-
-### 2 — Full server setup + deploy (Ansible)
-
-```bash
-cd ansible
-ansible-playbook playbooks/site.yml
-```
-
-This installs and configures everything on the EC2 instance in one shot: packages, SSH hardening, firewall, Nginx, SSL, Anubis, CV service, Docker demos, cron jobs.
-
-### 3 — Rebuild demo Docker images
-
-Only needed when demo source code changes:
-
-```bash
-./scripts/build-and-push.sh
-ansible-playbook ansible/playbooks/site.yml
-```
-
-## Security
-
-- SSH on port 2222, key-only auth, root login disabled
-- UFW: only ports 80, 443, 2222 open
-- fail2ban: blocks after 3 failed SSH attempts, monitors Nginx logs
-- Anubis WAF (difficulty 6): PoW challenge for all proxied routes — filters AI crawlers, headless browsers, scrapers
-- Nginx security headers: HSTS, CSP, X-Frame-Options, Permissions-Policy, `server_tokens off`
-- All demo APIs run on localhost-only ports, never directly exposed
+Authentication uses GitHub OIDC federation — no stored AWS credentials. The IAM role is scoped to specific resources and cannot run `terraform apply` or modify IAM.
 
 ## Cost
 
-Targeting < $15 USD/month on AWS:
+Running at **~$3-6 USD/month** (covered by AWS credits):
 
 | Resource | ~Cost |
 |----------|-------|
-| EC2 t4g.small (eu-west-1) | ~$12/mo |
-| EBS 8 GB gp3 | ~$0.65/mo |
-| Elastic IP | $0 (attached) |
-| Data transfer | ~$0.50/mo |
-| Cloudflare DNS | Free |
+| ECS Fargate Spot (3 tasks) | ~$2-4/mo |
+| CloudFront | $0-1/mo |
+| Cloud Map | ~$0.40/mo |
+| S3 + EFS + ECR | ~$0.10/mo |
+| Lambda + DynamoDB + EventBridge | $0 (free tier) |
+| ACM + API Gateway | $0 |
 
-AWS Budgets alert configured at $15/month threshold.
+No ALB ($16/mo), no NAT Gateway ($32/mo), no RDS ($14/mo after free tier). Every cost decision is documented in the migration strategy.
+
+## Security
+
+- CloudFront security headers: HSTS, CSP, X-Frame-Options, Permissions-Policy, nosniff
+- ACM TLS 1.3, auto-renewal
+- API Gateway throttling (rate limiting)
+- ECS tasks in VPC, security groups restrict inbound to VPC CIDR
+- GitHub Actions OIDC — no long-lived credentials
+- IAM least-privilege: each Lambda/ECS role scoped to specific resources
+- EFS encrypted at rest
