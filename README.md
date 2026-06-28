@@ -15,33 +15,17 @@ Infrastructure-as-Code and CI/CD automation behind my personal portfolio at [asa
 
 ## Architecture
 
-```
-Internet
-   │
-   ▼
-Cloudflare DNS (asanchezbl.dev)
-   │
-   ▼
-CloudFront (CDN + ACM SSL + security headers)
-   │
-   ├── S3 ──────────── static content (landing, portfolio, CV PDFs, 3 SPA frontends, assets)
-   ├── Lambda ───────── CV visit counter (DynamoDB)
-   └── API Gateway ──── HTTP API (path rewriting, throttling)
-          │
-          ▼ (VPC Link)
-     Cloud Map (service discovery)
-          │
-          ├── ECS Fargate Spot ── SERP backend (FastAPI, mock data)
-          ├── ECS Fargate Spot ── CatLink backend (FastAPI, mocked Nokia + Gemini)
-          └── ECS Fargate Spot ── MatchCota backend (FastAPI) + Postgres 15 sidecar
-                                    └── EFS (persistent data)
+![AWS Serverless Architecture](assets/images/architecture-diagram.png)
 
-Automation:
-   ├── EventBridge → Lambda ── demo-reset (every 6h, restarts SERP + CatLink)
-   └── EventBridge → Lambda ── cost-reporter (weekly → Discord webhook)
-```
+Traffic enters through **Cloudflare DNS** and hits **CloudFront**, which handles SSL (ACM) and security headers. CloudFront routes requests to three origins based on path:
 
-All backend images are ARM64 (Graviton), running on Fargate Spot across 2 AZs in eu-west-1.
+- **S3** serves all static content: landing page, portfolio, CV PDFs, three SPA frontends, and assets
+- **Lambda + DynamoDB** handles the CV visit counter
+- **API Gateway HTTP API** routes demo API requests through a VPC Link to **Cloud Map**, which discovers the backend services
+
+Inside the VPC (eu-west-1, 2 AZs), three **ECS Fargate Spot** tasks run the demo backends (SERP, CatLink, MatchCota). MatchCota includes a Postgres 15 sidecar container with persistent storage on **EFS**. All images are ARM64 (Graviton) stored in **ECR**.
+
+Two **EventBridge** scheduled rules drive automation: a Lambda resets SERP and CatLink demo data every 6 hours, and another sends a weekly cost report to Discord.
 
 ## Stack
 
