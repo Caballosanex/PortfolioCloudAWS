@@ -53,6 +53,10 @@ resource "aws_lambda_function" "cv_counter" {
   timeout          = 10
   memory_size      = 128
 
+  lifecycle {
+    ignore_changes = [filename, source_code_hash]
+  }
+
   tags = { Name = "${var.project_name}-cv-counter" }
 }
 
@@ -114,6 +118,10 @@ resource "aws_lambda_function" "demo_reset" {
   source_code_hash = data.archive_file.demo_reset.output_base64sha256
   timeout          = 30
   memory_size      = 128
+
+  lifecycle {
+    ignore_changes = [filename, source_code_hash]
+  }
 
   environment {
     variables = {

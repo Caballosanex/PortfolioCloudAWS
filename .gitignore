@@ -80,6 +80,8 @@ monitoring/prometheus-data/
 # Context-only files (not part of the deployed site)
 claude.md
 CLAUDE.md
+CICD_IMPLEMENTATION_PLAN.md
+MIGRATION_STRATEGY.md
 CVs_pdte_actualizar/
 Certificaciones/
 NAS_Ismael_Prego/
