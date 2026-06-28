@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-# CI-compatible build script for GitHub Actions (ARM64 runner).
+# CI-compatible build script for GitHub Actions (x86 runner + QEMU for ARM64).
 # Env vars expected: ECR_REGISTRY, S3_BUCKET, BUILD_SERP, BUILD_CATLINK, BUILD_MATCHCOTA, BUILD_FRONTENDS
 # Source repos expected at /tmp/SERP, /tmp/CatLink, /tmp/MatchCota
 
@@ -42,8 +42,9 @@ CMD ["serve", "-s", "build", "-l", "3000", "--no-compression"]
 EOF
 
   echo "Building SERP backend image..."
-  docker build -t "$ECR_REGISTRY/asanchezbl-portfolio/serp-backend:latest" /tmp/SERP/backend
-  docker push "$ECR_REGISTRY/asanchezbl-portfolio/serp-backend:latest"
+  docker buildx build --platform linux/arm64 \
+    -t "$ECR_REGISTRY/asanchezbl-portfolio/serp-backend:latest" \
+    --push /tmp/SERP/backend
   echo "SERP backend pushed."
 fi
 
@@ -75,8 +76,9 @@ CMD ["serve", "-s", "dist", "-l", "3000", "--no-compression"]
 EOF
 
   echo "Building CatLink backend image..."
-  docker build -t "$ECR_REGISTRY/asanchezbl-portfolio/catlink-backend:latest" /tmp/CatLink/backend
-  docker push "$ECR_REGISTRY/asanchezbl-portfolio/catlink-backend:latest"
+  docker buildx build --platform linux/arm64 \
+    -t "$ECR_REGISTRY/asanchezbl-portfolio/catlink-backend:latest" \
+    --push /tmp/CatLink/backend
   echo "CatLink backend pushed."
 fi
 
@@ -121,8 +123,9 @@ print("Patched hostRouting.js (VITE_DEMO_TENANT shortcut)")
 PYEOF
 
   echo "Building MatchCota backend image..."
-  docker build -t "$ECR_REGISTRY/asanchezbl-portfolio/matchcota-backend:latest" /tmp/MatchCota/backend
-  docker push "$ECR_REGISTRY/asanchezbl-portfolio/matchcota-backend:latest"
+  docker buildx build --platform linux/arm64 \
+    -t "$ECR_REGISTRY/asanchezbl-portfolio/matchcota-backend:latest" \
+    --push /tmp/MatchCota/backend
   echo "MatchCota backend pushed."
 fi
 

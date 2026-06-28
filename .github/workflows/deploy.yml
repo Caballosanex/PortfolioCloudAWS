@@ -90,9 +90,13 @@ jobs:
   build-and-deploy:
     needs: changes
     if: needs.changes.outputs.docker == 'true'
-    runs-on: ubuntu-24.04-arm64
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+      - uses: docker/setup-buildx-action@v3
       - name: Clone source repos
         run: |
           git clone --depth 1 https://github.com/Caballosanex/SERP.git /tmp/SERP
