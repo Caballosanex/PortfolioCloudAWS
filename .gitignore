@@ -64,6 +64,10 @@ lambda/**/*.zip
 # Generated PDFs (will be generated at runtime)
 web/cv-service/generated/
 
+# Binary site assets (photos, certificates, images) — uploaded directly to S3
+# via scripts/sync-assets.sh, never committed. See that script for why.
+/assets/
+
 # Docker volumes and data
 docker/serp/db-data/
 docker/catlink/db-data/

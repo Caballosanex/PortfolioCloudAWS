@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - 'web/**'
-      - 'assets/**'
       - 'lambda/**'
       - 'docker/**'
       - 'scripts/ci-build.sh'
@@ -30,7 +29,6 @@ jobs:
           filters: |
             web:
               - 'web/**'
-              - 'assets/**'
             lambda:
               - 'lambda/**'
             docker:
@@ -50,11 +48,12 @@ jobs:
           aws-region: eu-west-1
       - name: Sync to S3
         run: |
+          # assets/ is not tracked in git (uploaded directly to S3, see scripts/sync-assets.sh) —
+          # excluded here so this --delete sync never touches it.
           aws s3 sync web/landing/ s3://asanchezbl-static/ --delete \
             --exclude "demo/*" --exclude "cv/*" --exclude "portfolio/*" --exclude "assets/*"
           aws s3 sync web/portfolio/ s3://asanchezbl-static/portfolio/ --delete
           aws s3 sync web/cv-page/ s3://asanchezbl-static/cv/ --exclude "*.pdf"
-          aws s3 sync assets/ s3://asanchezbl-static/assets/ --delete
       - name: Invalidate CloudFront
         run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_DIST_ID }} --paths "/*"
 
