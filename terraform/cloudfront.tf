@@ -67,6 +67,41 @@ resource "aws_cloudfront_response_headers_policy" "security" {
   }
 }
 
+# Response headers policy for the CV PDFs. Same security headers as above, but the CSP allows the
+# browser's built-in PDF viewer: with object-src 'none' mobile Chrome refuses to render the PDF
+# inside the /cv iframe ("This content is blocked").
+resource "aws_cloudfront_response_headers_policy" "pdf" {
+  name = "${var.project_name}-pdf-headers"
+
+  security_headers_config {
+    strict_transport_security {
+      access_control_max_age_sec = 31536000
+      include_subdomains         = true
+      preload                    = true
+      override                   = true
+    }
+
+    frame_options {
+      frame_option = "SAMEORIGIN"
+      override     = true
+    }
+
+    content_type_options {
+      override = true
+    }
+
+    referrer_policy {
+      referrer_policy = "strict-origin-when-cross-origin"
+      override        = true
+    }
+
+    content_security_policy {
+      content_security_policy = "default-src 'self'; object-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+      override                = true
+    }
+  }
+}
+
 # CloudFront distribution
 resource "aws_cloudfront_distribution" "main" {
   enabled             = true
@@ -112,6 +147,18 @@ resource "aws_cloudfront_distribution" "main" {
       event_type   = "viewer-request"
       function_arn = aws_cloudfront_function.spa_router.arn
     }
+  }
+
+  # /cv/*.pdf -> S3 with PDF-friendly headers (must come before the other /cv behaviors)
+  ordered_cache_behavior {
+    path_pattern               = "/cv/*.pdf"
+    allowed_methods            = ["GET", "HEAD", "OPTIONS"]
+    cached_methods             = ["GET", "HEAD"]
+    target_origin_id           = "s3-static"
+    viewer_protocol_policy     = "redirect-to-https"
+    compress                   = true
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.pdf.id
+    cache_policy_id            = data.aws_cloudfront_cache_policy.caching_optimized.id
   }
 
   # /cv/api/* → API Gateway (CV counter Lambda)
