@@ -73,6 +73,7 @@ jobs:
           for fn_dir in lambda/*/; do
             fn_name=$(basename "$fn_dir")
             case "$fn_name" in
+              alarm_notifier) aws_name="asanchezbl-portfolio-alarm-notifier" ;;
               cost_reporter) aws_name="asanchezbl-portfolio-cost-reporter" ;;
               cv_counter)    aws_name="asanchezbl-portfolio-cv-counter" ;;
               demo_reset)    aws_name="asanchezbl-portfolio-demo-reset" ;;
