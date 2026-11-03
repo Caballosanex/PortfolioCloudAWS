@@ -252,6 +252,30 @@
 
     .back-link:hover { color: var(--accent); }
 
+    [hidden] { display: none !important; }
+
+    .mobile-note {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .mobile-note a {
+      display: inline-block;
+      margin-top: 0.9rem;
+      padding: 0.65rem 1.3rem;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
     @media (max-width: 600px) {
       .preview-container iframe { height: 70vh; }
       .download-btn { width: 100%; justify-content: center; }
@@ -285,7 +309,12 @@
     <button class="lang-tab" data-lang="ca">Catalan</button>
   </div>
 
-  <div class="preview-wrapper">
+  <div class="mobile-note" id="mobile-note" hidden>
+    <p>Your browser can't preview PDFs inside the page. Open the CV in a new tab or download it with the button below.</p>
+    <a href="/cv/CV_Alex_Sanchez_Blabia_ES.pdf?v=20261103" id="open-link" target="_blank" rel="noopener">Open CV</a>
+  </div>
+
+  <div class="preview-wrapper" id="preview-wrapper">
     <div class="preview-container">
       <iframe id="cv-preview"></iframe>
     </div>
