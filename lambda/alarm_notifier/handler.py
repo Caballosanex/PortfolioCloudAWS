@@ -67,10 +67,15 @@ def post(webhook_url, payload):
 def lambda_handler(event, context):
     webhook_url = get_webhook_url()
     for record in event.get("Records", []):
+        message = record["Sns"]["Message"]
         try:
-            alarm = json.loads(record["Sns"]["Message"])
-        except (KeyError, ValueError):
-            logger.exception("Unparseable SNS message")
+            alarm = json.loads(message)
+            if not isinstance(alarm, dict) or "AlarmName" not in alarm:
+                raise ValueError("not a CloudWatch alarm")
+        except ValueError:
+            # Not a CloudWatch alarm (e.g. AWS Budgets): forward as plain text.
+            subject = record["Sns"].get("Subject") or "AWS notification"
+            post(webhook_url, {"content": f"**{subject}**\n{message}"[:1900]})
             continue
         logger.info("Alarm %s -> %s", alarm.get("AlarmName"), alarm.get("NewStateValue"))
         post(webhook_url, build_payload(alarm))

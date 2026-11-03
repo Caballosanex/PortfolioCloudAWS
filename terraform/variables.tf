@@ -32,3 +32,9 @@ variable "monthly_budget" {
   type        = number
   default     = 15
 }
+
+variable "gross_budget_limit" {
+  description = "Monthly gross spend (credits excluded) alert threshold in USD"
+  type        = number
+  default     = 25
+}
