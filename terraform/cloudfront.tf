@@ -67,11 +67,11 @@ resource "aws_cloudfront_response_headers_policy" "security" {
   }
 }
 
-# Response headers policy for the CV PDFs. Same security headers as above, but the CSP allows the
-# browser's built-in PDF viewer: with object-src 'none' mobile Chrome refuses to render the PDF
-# inside the /cv iframe ("This content is blocked").
-resource "aws_cloudfront_response_headers_policy" "pdf" {
-  name = "${var.project_name}-pdf-headers"
+# Response headers policy for the /cv page and its PDFs. Same security headers as above, but the CSP
+# allows the browser's built-in PDF viewer: with object-src 'none' (on the page or on the PDF) mobile
+# Chrome refuses to render the PDF inside the /cv iframe ("This content is blocked").
+resource "aws_cloudfront_response_headers_policy" "cv" {
+  name = "${var.project_name}-cv-headers"
 
   security_headers_config {
     strict_transport_security {
@@ -96,7 +96,7 @@ resource "aws_cloudfront_response_headers_policy" "pdf" {
     }
 
     content_security_policy {
-      content_security_policy = "default-src 'self'; object-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+      content_security_policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; frame-src 'self'; frame-ancestors 'self'; connect-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;"
       override                = true
     }
   }
@@ -157,8 +157,28 @@ resource "aws_cloudfront_distribution" "main" {
     target_origin_id           = "s3-static"
     viewer_protocol_policy     = "redirect-to-https"
     compress                   = true
-    response_headers_policy_id = aws_cloudfront_response_headers_policy.pdf.id
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.cv.id
     cache_policy_id            = data.aws_cloudfront_cache_policy.caching_optimized.id
+  }
+
+  # /cv page (embeds the PDF in an iframe) -> same relaxed object-src
+  dynamic "ordered_cache_behavior" {
+    for_each = ["/cv", "/cv/", "/cv/index.html"]
+    content {
+      path_pattern               = ordered_cache_behavior.value
+      allowed_methods            = ["GET", "HEAD", "OPTIONS"]
+      cached_methods             = ["GET", "HEAD"]
+      target_origin_id           = "s3-static"
+      viewer_protocol_policy     = "redirect-to-https"
+      compress                   = true
+      response_headers_policy_id = aws_cloudfront_response_headers_policy.cv.id
+      cache_policy_id            = data.aws_cloudfront_cache_policy.caching_optimized.id
+
+      function_association {
+        event_type   = "viewer-request"
+        function_arn = aws_cloudfront_function.spa_router.arn
+      }
+    }
   }
 
   # /cv/api/* → API Gateway (CV counter Lambda)
