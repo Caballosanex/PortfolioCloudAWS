@@ -1,6 +1,6 @@
 personal:
   name: "Alex Sanchez Blabia"
-  title: "Junior Systems & Network Administrator"
+  title: "Cloud Operations Engineer | AWS, Azure & OCI"
   email: "alexsanchezblabia@gmail.com"
   phone: "+34 608 840 086"
   location: "Barcelona, Spain"
@@ -9,40 +9,61 @@ personal:
   website: "asanchezbl.dev"
 
 summary: >
-  Junior Systems and Network Administrator with 2+ years of hands-on experience in IT
-  support, systems maintenance, and network administration. Skilled in Linux, cloud
-  infrastructure (AWS), Docker, and cybersecurity. Active open-source contributor with
-  experience in hackathon-level full-stack development. ASIX graduate from iTIC
-  Barcelona.
+  Cloud Operations Engineer with a systems and network administration background (ASIX),
+  working hands-on in multi-client, multi-cloud managed services (AWS first, then Azure
+  and OCI): production incident handling, backup and restore testing, IAM/RBAC reviews,
+  automation and governance. 2+ years of IT experience. Hackathon full-stack developer,
+  open-source contributor, AWS GameDay 2025 runner-up and AWS JAM 2026 third place.
 
 experience:
+  - title: "Cloud Engineer, Managed Services (Systems Administrator)"
+    company: "Logicalis Spain SLU"
+    date: "Nov 2026 - Present"
+    location: "Remote"
+    tasks:
+      - "Day-to-day operations of AWS, Azure and Oracle Cloud (OCI) environments for enterprise clients in the multi-client Managed Services cloud team"
+      - "Incident and change handling, monitoring alerts, maintenance notices, backup and restore tests, and access management"
+      - "Automation and documentation for the team; rotating 24x7 on-call duty"
+      - "Technologies: AWS, Azure, OCI, LogicMonitor, Terraform, Python, Bash, ITSM ticketing"
+
+  - title: "Cloud Operations Engineer, Managed Services"
+    company: "Ibertech (outsourced to Logicalis Spain SLU)"
+    date: "Jun 2026 - Oct 2026"
+    location: "Barcelona"
+    tasks:
+      - "L2 incident handling and root cause analysis on production across ~10 enterprise AWS accounts (one a 21-account Organization), Azure subscriptions and 3 OCI tenancies, e.g. CloudFront 5xx correlated with RDS connection pool saturation, RDS performance alerts with Performance Insights"
+      - "Executed changes with approval flows and client communication; analysed the impact of Azure and OCI maintenance and Service Health notices"
+      - "Backup and restore testing across AWS Backup, Azure and Veeam; designed an isolated restore network (dedicated VPC shared via AWS RAM, SSM endpoints, least-privilege security group)"
+      - "IAM and RBAC reviews on AWS and Azure: Identity Center permission sets, IAM PassRole fix, 10-action remediation plan for 33 audit deviations; activated AWS Security Hub CSPM with a read-only policy for a large Organization"
+      - "Network troubleshooting (Route53, Transit Gateway, ExpressRoute, Direct Connect) and FinOps report validation"
+      - "Documented the team's cloud automation catalog; designed a 15-control cloud governance matrix validated against AWS FSBP and Azure MCSB; drafted 15 AWS operational procedures"
+      - "Proposed moving automation pipelines off expiring client secrets to Managed Identity, Workload Identity Federation or Key Vault certificate autorotation; contributed to the client ticketing portal integration (per-client connectors)"
+      - "24x7 on-call rotation (one week per month) since Aug 2026; converted from external to permanent staff after 4 months"
+      - "Technologies: AWS, Azure, OCI, LogicMonitor, Veeam, Terraform, Python, Bash, Jira"
+
   - title: "Network Infrastructure Consultant"
     company: "Ismael Prego (Tech Content Creator)"
     date: "2025"
     location: "Remote"
     tasks:
-      - "Designed a complete 10GbE network and NAS infrastructure for a professional video production studio handling 3-4 TB/month of 4K footage"
-      - "Evaluated and compared rack-mounted NAS solutions (Synology RS422+ vs RS2423RP+) and network switching equipment (Ubiquiti UniFi)"
-      - "Performed bandwidth analysis demonstrating Ethernet 10GbE sufficiency over fiber optic, saving the client significant cost"
-      - "Delivered comprehensive proposal including RAID6 configuration, UPS protection, static IP planning, and budget (4,700 - 7,300 EUR)"
+      - "Designed a complete 10GbE network and NAS infrastructure for a professional video studio handling 3-4 TB/month of 4K footage"
+      - "Compared rack NAS (Synology RS422+ vs RS2423RP+) and Ubiquiti UniFi switching; bandwidth analysis showed 10GbE Ethernet was sufficient over fiber, saving significant cost"
+      - "Delivered a full proposal: RAID6, UPS protection, static IP plan and budget (4,700 - 7,300 EUR)"
 
   - title: "Help Desk Technician N1"
     company: "Fractalia Systems"
     date: "Nov 2022 - Aug 2024"
     location: "L'Hospitalet de Llobregat"
     tasks:
-      - "Managed call center with 10 phone lines, handling ~200 weekly calls from Telefonica and CaixaBank suppliers"
-      - "Resolved system incidents and mobile network issues as N1 technician"
-      - "Authored over 50% of service reports for the department"
+      - "Managed a call center with 10 phone lines, handling ~200 weekly calls from telecom and banking sector suppliers; resolved system and mobile network incidents as N1"
+      - "Authored over 50% of the department's service reports"
 
   - title: "IT Intern"
     company: "Red Computer Barcelona"
     date: "Mar 2022 - Jun 2022"
     location: "Barcelona"
     tasks:
-      - "Systems maintenance for SMEs with budgets between 2,000 - 4,000 EUR"
-      - "User and shared resource administration for individuals and SMEs"
-      - "Help desk support (local and remote), assembling ~5 computers per day"
+      - "Systems maintenance, user administration and local/remote help desk for individuals and SMEs; assembled ~5 computers per day"
 
 education:
   - degree: "Higher Certificate in Systems and Network Administration (ASIX)"
@@ -64,18 +85,23 @@ education:
 
 skills:
   systems: "Linux (Ubuntu, Debian), Windows Server, Proxmox, VMware"
-  networking: "TCP/IP, DNS, DHCP, VPN, VLAN, Cisco IOS, 10GbE, LAN/WAN"
-  cloud: "AWS (EC2, VPC, S3, Route53, IAM), Terraform, Ansible"
+  networking: "TCP/IP, DNS, DHCP, VPN, VLAN, Cisco IOS, 10GbE, Route53, Transit Gateway, ExpressRoute, Direct Connect"
+  cloud: "AWS (IAM, IAM Identity Center, VPC, EC2, S3, RDS, CloudFront, CloudWatch, CloudTrail, AWS Backup, Systems Manager, RAM, Security Hub, ECS Fargate, Lambda), Terraform, Ansible"
+  multicloud: "Azure (Entra ID, PIM, Lighthouse, Service Health, Load Balancer, Arc, Cost Management), Oracle Cloud (OCI)"
   containers: "Docker, Docker Compose"
-  security: "fail2ban, UFW/iptables, Certbot/SSL, Penetration Testing"
+  security: "IAM/RBAC, cloud governance, fail2ban, UFW/iptables, Certbot/SSL, Penetration Testing"
   development: "Python, C, C++, Bash, FastAPI, React, Flutter, Git"
-  monitoring: "Prometheus, Grafana, Node Exporter"
-  other: "Nginx, PostgreSQL, SQLite, Office 365, Self-hosting"
+  monitoring: "LogicMonitor, Veeam, CloudWatch, Prometheus, Grafana, Node Exporter"
+  other: "Nginx, PostgreSQL, SQLite, Jira, ITSM ticketing, Office 365, Self-hosting"
 
 certifications:
-  - name: "AWS Academy Cloud Foundations"
+  - name: "AWS Certified Cloud Practitioner (CLF-C02)"
     issuer: "Amazon Web Services"
-    date: "2025"
+    date: "Nov 2026"
+
+  - name: "AWS Certified Solutions Architect - Associate (in progress)"
+    issuer: "Amazon Web Services"
+    date: "Target Jan 2027"
 
   - name: "CCNA: Introduction to Networks"
     issuer: "Cisco"
@@ -109,6 +135,7 @@ languages:
 
 achievements:
   - "AWS GameDay 2025 - National runner-up (Team AMEP, iTIC Barcelona)"
+  - "AWS JAM 2026 - 3rd place nationally (Team Indiferent, iTIC Barcelona)"
   - "Talent Arena Hackathon 2025 - Built SERP emergency management system"
   - "Talent Arena Hackathon 2026 - Built CatLink EV charger AI agent"
   - "Active open-source contributor: WeatherMaster (Flutter), mfkey/Flipper Zero (70x performance optimization in C)"

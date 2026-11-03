@@ -1,6 +1,6 @@
 personal:
   name: "Alex Sanchez Blabia"
-  title: "Administrador Junior de Sistemas y Redes"
+  title: "Ingeniero de Operaciones Cloud | AWS, Azure y OCI"
   email: "alexsanchezblabia@gmail.com"
   phone: "+34 608 840 086"
   location: "Barcelona, España"
@@ -9,30 +9,54 @@ personal:
   website: "asanchezbl.dev"
 
 summary: >
-  Administrador Junior de Sistemas y Redes con más de 2 años de experiencia práctica en
-  soporte IT, mantenimiento de sistemas y administración de redes. Competente en Linux,
-  infraestructura cloud (AWS), Docker y ciberseguridad. Contribuidor activo de proyectos
-  open source con experiencia en desarrollo full-stack a nivel de hackathon. Titulado del
-  CFGS ASIX en iTIC Barcelona.
+  Ingeniero de Operaciones Cloud con base en administración de sistemas y redes (ASIX),
+  trabajando en servicios gestionados multicliente y multicloud (AWS en primer lugar, además
+  de Azure y OCI): gestión de incidencias en producción, pruebas de backup y restore,
+  revisiones de IAM/RBAC, automatización y gobierno. Más de 2 años de experiencia en IT.
+  Desarrollador full-stack en hackathons, contribuidor open source, subcampeón nacional de
+  AWS GameDay 2025 y tercer puesto en AWS JAM 2026.
 
 experience:
+  - title: "Ingeniero Cloud, Servicios Gestionados (Administrador de Sistemas)"
+    company: "Logicalis Spain SLU"
+    date: "Nov 2026 - Actualidad"
+    location: "Remoto"
+    tasks:
+      - "Operación diaria de entornos AWS, Azure y Oracle Cloud (OCI) de clientes empresariales en el equipo cloud multicliente de Servicios Gestionados"
+      - "Gestión de incidencias y cambios, alertas de monitorización, avisos de mantenimiento, pruebas de backup y restore y gestión de accesos"
+      - "Automatización y documentación para el equipo; guardias rotativas 24x7"
+      - "Tecnologías: AWS, Azure, OCI, LogicMonitor, Terraform, Python, Bash, ticketing ITSM"
+
+  - title: "Ingeniero de Operaciones Cloud, Servicios Gestionados"
+    company: "Ibertech (externalizado en Logicalis Spain SLU)"
+    date: "Jun 2026 - Oct 2026"
+    location: "Barcelona"
+    tasks:
+      - "Gestión de incidencias L2 y análisis de causa raíz en producción en ~10 cuentas AWS de clientes empresariales (una de ellas una Organization de 21 cuentas), suscripciones Azure y 3 tenancies OCI, p. ej. 5xx de CloudFront correlados con saturación del pool de conexiones de RDS, alertas de rendimiento de RDS con Performance Insights"
+      - "Ejecución de cambios con flujos de aprobación y comunicación con el cliente; análisis de impacto de avisos de mantenimiento y Service Health de Azure y OCI"
+      - "Pruebas de backup y restore con AWS Backup, Azure y Veeam; diseño de una red de restauración aislada (VPC dedicada compartida vía AWS RAM, endpoints SSM, security group de mínimo privilegio)"
+      - "Revisiones de IAM y RBAC en AWS y Azure: permission sets de Identity Center, corrección de IAM PassRole, plan de remediación de 10 acciones para 33 desviaciones de auditoría; activación de AWS Security Hub CSPM con política de solo lectura para una Organization grande"
+      - "Resolución de problemas de red (Route53, Transit Gateway, ExpressRoute, Direct Connect) y validación de informes FinOps"
+      - "Documentación del catálogo de automatizaciones cloud del equipo; diseño de una matriz de gobierno cloud de 15 controles validada frente a AWS FSBP y Azure MCSB; redacción de 15 procedimientos operativos de AWS"
+      - "Propuesta de migrar los pipelines de automatización desde client secrets con caducidad a Managed Identity, Workload Identity Federation o autorrotación de certificados en Key Vault; contribución a la integración del portal de ticketing de clientes (conectores por cliente)"
+      - "Guardias 24x7 rotativas (una semana al mes) desde ago 2026; paso de externo a plantilla indefinida tras 4 meses"
+      - "Tecnologías: AWS, Azure, OCI, LogicMonitor, Veeam, Terraform, Python, Bash, Jira"
+
   - title: "Consultor de Infraestructura de Red"
     company: "Ismael Prego (Creador de contenido tech)"
     date: "2025"
     location: "Remoto"
     tasks:
-      - "Diseño completo de red 10GbE e infraestructura NAS para un estudio de producción de vídeo profesional con 3-4 TB/mes de material 4K"
-      - "Evaluación y comparativa de soluciones NAS en rack (Synology RS422+ vs RS2423RP+) y equipamiento de red (Ubiquiti UniFi)"
-      - "Análisis de ancho de banda demostrando la suficiencia de Ethernet 10GbE frente a fibra óptica, ahorrando costes significativos al cliente"
-      - "Entrega de propuesta integral incluyendo configuración RAID6, protección UPS, planificación IP estática y presupuesto (4.700 - 7.300 EUR)"
+      - "Diseño completo de red 10GbE e infraestructura NAS para un estudio de vídeo profesional con 3-4 TB/mes de material 4K"
+      - "Comparativa de NAS en rack (Synology RS422+ vs RS2423RP+) y switching Ubiquiti UniFi; el análisis de ancho de banda demostró que 10GbE Ethernet bastaba frente a fibra, con un ahorro significativo"
+      - "Entrega de propuesta integral: RAID6, protección UPS, plan de IPs estáticas y presupuesto (4.700 - 7.300 EUR)"
 
   - title: "Técnico Help Desk N1"
     company: "Fractalia Systems"
     date: "Nov 2022 - Ago 2024"
     location: "L'Hospitalet de Llobregat"
     tasks:
-      - "Gestión de centralita telefónica con 10 líneas, atendiendo ~200 llamadas semanales de proveedores de Telefónica y empleados de CaixaBank"
-      - "Resolución de incidencias de sistemas y redes móviles como técnico N1"
+      - "Gestión de centralita con 10 líneas, atendiendo ~200 llamadas semanales de proveedores y empleados del sector telecomunicaciones y banca; resolución de incidencias de sistemas y redes móviles como N1"
       - "Creación de más del 50% de los informes de servicio del departamento"
 
   - title: "Prácticas IT"
@@ -40,9 +64,7 @@ experience:
     date: "Mar 2022 - Jun 2022"
     location: "Barcelona"
     tasks:
-      - "Mantenimiento de sistemas para PYMES con presupuestos entre 2.000 - 4.000 EUR"
-      - "Administración de usuarios y recursos compartidos para particulares y PYMES"
-      - "Soporte help desk local y remoto, montaje de ~5 equipos diarios"
+      - "Mantenimiento de sistemas, administración de usuarios y help desk local y remoto para particulares y PYMES; montaje de ~5 equipos diarios"
 
 education:
   - degree: "CFGS en Administración de Sistemas Informáticos en Red (ASIX)"
@@ -64,18 +86,23 @@ education:
 
 skills:
   systems: "Linux (Ubuntu, Debian), Windows Server, Proxmox, VMware"
-  networking: "TCP/IP, DNS, DHCP, VPN, VLAN, Cisco IOS, 10GbE, LAN/WAN"
-  cloud: "AWS (EC2, VPC, S3, Route53, IAM), Terraform, Ansible"
+  networking: "TCP/IP, DNS, DHCP, VPN, VLAN, Cisco IOS, 10GbE, Route53, Transit Gateway, ExpressRoute, Direct Connect"
+  cloud: "AWS (IAM, IAM Identity Center, VPC, EC2, S3, RDS, CloudFront, CloudWatch, CloudTrail, AWS Backup, Systems Manager, RAM, Security Hub, ECS Fargate, Lambda), Terraform, Ansible"
+  multicloud: "Azure (Entra ID, PIM, Lighthouse, Service Health, Load Balancer, Arc, Cost Management), Oracle Cloud (OCI)"
   containers: "Docker, Docker Compose"
-  security: "fail2ban, UFW/iptables, Certbot/SSL, Pruebas de Penetración"
+  security: "IAM/RBAC, gobierno cloud, fail2ban, UFW/iptables, Certbot/SSL, Pruebas de Penetración"
   development: "Python, C, C++, Bash, FastAPI, React, Flutter, Git"
-  monitoring: "Prometheus, Grafana, Node Exporter"
-  other: "Nginx, PostgreSQL, SQLite, Office 365, Self-hosting"
+  monitoring: "LogicMonitor, Veeam, CloudWatch, Prometheus, Grafana, Node Exporter"
+  other: "Nginx, PostgreSQL, SQLite, Jira, ticketing ITSM, Office 365, Self-hosting"
 
 certifications:
-  - name: "AWS Academy Cloud Foundations"
+  - name: "AWS Certified Cloud Practitioner (CLF-C02)"
     issuer: "Amazon Web Services"
-    date: "2025"
+    date: "Nov 2026"
+
+  - name: "AWS Certified Solutions Architect - Associate (en curso)"
+    issuer: "Amazon Web Services"
+    date: "Objetivo Ene 2027"
 
   - name: "CCNA: Introduction to Networks"
     issuer: "Cisco"
@@ -107,12 +134,13 @@ languages:
   - lang: "Castellano"
     level: "Nativo"
   - lang: "Inglés"
-    level: "Competencia profesional completa (B2 Cambridge)"
+    level: "Profesional completo (B2 Cambridge)"
   - lang: "Francés"
     level: "Básico"
 
 achievements:
   - "AWS GameDay 2025 - Subcampeón nacional (Equipo AMEP, iTIC Barcelona)"
+  - "AWS JAM 2026 - 3.er puesto nacional (Equipo Indiferent, iTIC Barcelona)"
   - "Talent Arena Hackathon 2025 - Desarrollo del sistema de emergencias SERP"
   - "Talent Arena Hackathon 2026 - Desarrollo de CatLink, agente IA para cargadores de VE"
-  - "Contribuidor open source activo: WeatherMaster (Flutter), mfkey/Flipper Zero (optimización de rendimiento 70x en C)"
+  - "Contribuidor open source activo: WeatherMaster (Flutter), mfkey/Flipper Zero (optimización 70x en C)"

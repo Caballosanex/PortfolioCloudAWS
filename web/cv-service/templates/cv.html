@@ -7,15 +7,15 @@
 
     @page {
       size: A4;
-      margin: 18mm 20mm 18mm 20mm;
+      margin: 10mm 16mm 10mm 16mm;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-      font-size: 10pt;
-      line-height: 1.45;
+      font-size: 9.5pt;
+      line-height: 1.35;
       color: #1a1a2e;
     }
 
@@ -23,7 +23,7 @@
     .header {
       display: table;
       width: 100%;
-      margin-bottom: 14pt;
+      margin-bottom: 8pt;
       padding-bottom: 10pt;
       border-bottom: 2.5pt solid #4f46e5;
     }
@@ -90,7 +90,7 @@
 
     /* --- Summary --- */
     .summary {
-      margin-bottom: 12pt;
+      margin-bottom: 8pt;
       font-size: 9pt;
       color: #3a3a5a;
       line-height: 1.55;
@@ -98,7 +98,7 @@
 
     /* --- Sections --- */
     .section {
-      margin-bottom: 12pt;
+      margin-bottom: 8pt;
     }
 
     .section-title {
@@ -109,12 +109,12 @@
       letter-spacing: 0.06em;
       padding-bottom: 3pt;
       border-bottom: 1.2pt solid #e5e5ee;
-      margin-bottom: 8pt;
+      margin-bottom: 5pt;
     }
 
     /* --- Experience & Education entries --- */
     .entry {
-      margin-bottom: 10pt;
+      margin-bottom: 6pt;
     }
 
     /* Table layout: title left, date right */
@@ -165,7 +165,7 @@
     }
 
     li {
-      margin-bottom: 2pt;
+      margin-bottom: 1pt;
       color: #3a3a5a;
     }
 
@@ -173,14 +173,14 @@
     .skill-row {
       display: table;
       width: 100%;
-      margin-bottom: 4pt;
+      margin-bottom: 2.5pt;
     }
 
     .skill-label {
       display: table-cell;
       font-weight: 600;
       color: #1a1a2e;
-      width: 90pt;
+      width: 112pt;
       font-size: 9pt;
     }
 
@@ -194,7 +194,7 @@
     .cert-item {
       display: table;
       width: 100%;
-      margin-bottom: 3pt;
+      margin-bottom: 1pt;
     }
 
     .cert-item-main {
@@ -246,7 +246,7 @@
     /* --- Achievements --- */
     .achievements li {
       font-size: 9pt;
-      margin-bottom: 3pt;
+      margin-bottom: 1.5pt;
     }
   </style>
 </head>
@@ -326,11 +326,12 @@
     {% set labels = {
       'systems': {'en': 'Systems', 'es': 'Sistemas', 'ca': 'Sistemes'},
       'networking': {'en': 'Networking', 'es': 'Redes', 'ca': 'Xarxes'},
-      'cloud': {'en': 'Cloud/IaC', 'es': 'Cloud/IaC', 'ca': 'Cloud/IaC'},
+      'cloud': {'en': 'AWS/IaC', 'es': 'AWS/IaC', 'ca': 'AWS/IaC'},
+      'multicloud': {'en': 'Azure/OCI', 'es': 'Azure/OCI', 'ca': 'Azure/OCI'},
       'containers': {'en': 'Containers', 'es': 'Contenedores', 'ca': 'Contenidors'},
       'security': {'en': 'Security', 'es': 'Seguridad', 'ca': 'Seguretat'},
       'development': {'en': 'Development', 'es': 'Desarrollo', 'ca': 'Desenvolupament'},
-      'monitoring': {'en': 'Monitoring', 'es': 'Monitorización', 'ca': 'Monitorització'},
+      'monitoring': {'en': 'Monitoring/Backup', 'es': 'Monitorización/Backup', 'ca': 'Monitorització/Backup'},
       'other': {'en': 'Other', 'es': 'Otros', 'ca': 'Altres'}
     } %}
     {% for key, value in cv.skills.items() %}
