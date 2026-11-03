@@ -1,7 +1,7 @@
 var pdfFiles = {
-  es: '/cv/CV_Alex_Sanchez_Blabia_ES.pdf',
-  en: '/cv/CV_Alex_Sanchez_Blabia_EN.pdf',
-  ca: '/cv/CV_Alex_Sanchez_Blabia_CA.pdf'
+  es: '/cv/CV_Alex_Sanchez_Blabia_ES.pdf?v=20261103',
+  en: '/cv/CV_Alex_Sanchez_Blabia_EN.pdf?v=20261103',
+  ca: '/cv/CV_Alex_Sanchez_Blabia_CA.pdf?v=20261103'
 };
 var currentLang = 'es';
 var loader = document.getElementById('iframe-loader');
